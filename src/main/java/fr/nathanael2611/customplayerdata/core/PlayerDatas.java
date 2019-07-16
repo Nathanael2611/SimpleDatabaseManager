@@ -37,6 +37,7 @@ public class PlayerDatas extends WorldSavedData {
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         PLAYERDATAS.clear();
+        System.out.println("reaaaaad");
         NBTTagList dataList = nbt.getTagList("playerdatas", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < dataList.tagCount(); i++) {
             PlayerData data = new PlayerData();
