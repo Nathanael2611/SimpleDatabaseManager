@@ -3,6 +3,7 @@ package fr.nathanael2611.simpledatabasemanager;
 import fr.nathanael2611.simpledatabasemanager.command.CommandCustomPlayerdData;
 import fr.nathanael2611.simpledatabasemanager.command.CommandDatabase;
 import fr.nathanael2611.simpledatabasemanager.core.Databases;
+import fr.nathanael2611.simpledatabasemanager.network.PacketHandler;
 import fr.nathanael2611.simpledatabasemanager.proxy.CommonProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -11,7 +12,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 @Mod(modid = "customplayerdata")
-public class CustomPlayerData {
+public class SimpleDatabaseManager {
 
     public static final String MOD_ID = "simpledatabasemanager";
     public static final String MOD_NAME = "SimpleDatabaseManager";
@@ -23,11 +24,12 @@ public class CustomPlayerData {
     private static CommonProxy proxy;
 
     @Mod.Instance
-    private static CustomPlayerData instance;
+    private static SimpleDatabaseManager instance;
 
     @Mod.EventHandler
     public void preInitialization(FMLPreInitializationEvent e){
         getProxy().preInitialization(e.getSuggestedConfigurationFile());
+        PacketHandler.initPackets();
     }
 
     @Mod.EventHandler
@@ -39,7 +41,7 @@ public class CustomPlayerData {
         return proxy;
     }
 
-    public static CustomPlayerData getInstance() {
+    public static SimpleDatabaseManager getInstance() {
         return instance;
     }
 

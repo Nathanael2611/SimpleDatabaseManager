@@ -1,5 +1,6 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
+import fr.nathanael2611.simpledatabasemanager.SimpleDatabaseManager;
 import fr.nathanael2611.simpledatabasemanager.util.Helpers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,14 +14,14 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class Databases extends WorldSavedData {
-    private static Databases INSTANCE;
+    private static Databases instance;
 
     public static final HashMap<UUID, Database> PLAYERDATAS = new HashMap<UUID, Database>();
     public static final HashMap<String, Database> DATABASES = new HashMap<String, Database>();
 
     public static void save() {
-        if (INSTANCE != null) {
-            INSTANCE.markDirty();
+        if (instance != null) {
+            instance.markDirty();
         }
     }
 
@@ -41,6 +42,10 @@ public class Databases extends WorldSavedData {
             DATABASES.put(dbName, new Database(dbName));
         }
         return DATABASES.get(dbName);
+    }
+
+    public static boolean containsDatabase(String dbName){
+        return DATABASES.containsKey(dbName);
     }
 
     @Override
@@ -83,12 +88,12 @@ public class Databases extends WorldSavedData {
         DATABASES.clear();
         if (!event.getServer().getEntityWorld().isRemote) {
             MapStorage storage = event.getServer().getEntityWorld().getMapStorage();
-            Databases data = (Databases) storage.getOrLoadData(Databases.class, "simpledatabasemanager");
+            Databases data = (Databases) storage.getOrLoadData(Databases.class, SimpleDatabaseManager.MOD_ID);
             if (data == null) {
-                data = new Databases("simpledatabasemanager");
-                storage.setData("simpledatabasemanager", data);
+                data = new Databases(SimpleDatabaseManager.MOD_ID);
+                storage.setData(SimpleDatabaseManager.MOD_ID, data);
             }
-            INSTANCE = data;
+            instance = data;
         }
     }
 
