@@ -2,6 +2,7 @@ package fr.nathanael2611.customplayerdata.command;
 
 import fr.nathanael2611.customplayerdata.core.Database;
 import fr.nathanael2611.customplayerdata.core.Databases;
+import fr.nathanael2611.customplayerdata.util.Helpers;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -12,9 +13,14 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CommandCustomPlayerdData extends CommandBase {
+
+
+
     @Override
     public String getName() {
         return "customplayerdata";
@@ -27,6 +33,9 @@ public class CommandCustomPlayerdData extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+        TextComponentString correctUsage = new TextComponentString(
+                "§cCorrect usage: /customplayerdata <player> <<set/get><String/Integer/Double/Float/Boolean>> <key> [<value>]"
+        );
         if(args.length > 2){
             String playerStr = args[0];
             String actionType = args[1];
@@ -38,6 +47,12 @@ public class CommandCustomPlayerdData extends CommandBase {
             Database playerData = Databases.getPlayerData(player);
 
 
+            if(!Arrays.asList(Database.COMMAND_ALL_ACTIONS).contains(actionType)){
+                sender.sendMessage(
+                        correctUsage
+                );
+            }
+
             if(actionType.startsWith("get")){
                 Object data = null;
                 if(actionType.equalsIgnoreCase("getString")){
@@ -46,17 +61,61 @@ public class CommandCustomPlayerdData extends CommandBase {
                 if(actionType.equalsIgnoreCase("getInteger")){
                     data = playerData.getInteger(args[2]);
                 }
+                if(actionType.equalsIgnoreCase("getDouble")){
+                    data = playerData.getDouble(args[2]);
+                }
+                if(actionType.equalsIgnoreCase("getFloat")){
+                    data = playerData.getFloat(args[2]);
+                }
+                if(actionType.equalsIgnoreCase("getBoolean")){
+                    data = playerData.getBoolean(args[2]);
+                }
+
                 sender.sendMessage(new TextComponentString(args[1].toUpperCase() + ":" + args[2] + " = " + data));
             }else if(actionType.startsWith("set")){
-                if(args.length != 4){
+                if(args.length <4){
                     sender.sendMessage(new TextComponentString("§cCorrect usage: " + args[0] + " " + args[1] + " " + args[2] + "<value>"));
                     return;
                 }
+                StringBuilder builder = null;
                 if(actionType.equalsIgnoreCase("setString")){
-                    playerData.setString(args[2], args[3]);
+                     builder = new StringBuilder();
+                    for(int i = 3; i < args.length; i++){
+                        builder.append(args[i]).append(" ");
+                    }
+                    playerData.setString(args[2], builder.toString().substring(0, builder.toString().length()-1));
+                }else if(actionType.equalsIgnoreCase("setBoolean")){
+                    if(args[3].equalsIgnoreCase("true") || args[3].equalsIgnoreCase("false")){
+                        playerData.setBoolean(args[2], Boolean.valueOf(args[3]));
+                    }else{
+                        sender.sendMessage(new TextComponentString("§cInvalid Boolean '"+args[3]+"'. A boolean is 'true' or 'false'."));
+                        return;
+                    }
+                }else if(Helpers.isNumeric(args[3])){
+                    if(actionType.equalsIgnoreCase("setInteger")){
+                        playerData.setInteger(args[2], Integer.parseInt(args[3]));
+                    }
+                    if(actionType.equalsIgnoreCase("setDouble")){
+                        playerData.setDouble(args[2], Double.parseDouble(args[3]));
+                    }
+                    if(actionType.equalsIgnoreCase("setFloat")){
+                        playerData.setFloat(args[2], Float.parseFloat(args[3]));
+                    }
+                }else{
+                    sender.sendMessage(
+                            new TextComponentString("§c'" + args[3] + "' is not a valid " + actionType.substring(3).toLowerCase() + ".")
+                    );
+                    return;
                 }
-                sender.sendMessage(new TextComponentString("The player's " + args[0].substring(3) + "was set to " + args[3]));
+
+                if(builder == null){
+                    builder = new StringBuilder();
+                    builder.append(args[3]);
+                }
+                sender.sendMessage(new TextComponentString("§2" + actionType.substring(3) + " §a'" + args[2] + "' §2in player §a'" + playerStr + "' §2was set to §a'" + builder.toString() + "'§2."));
             }
+        }else{
+            sender.sendMessage(correctUsage);
         }
 
     }

@@ -12,6 +12,17 @@ import java.util.List;
 
 public class Database implements INBTSerializable<NBTTagCompound> {
 
+    public static final String[] COMMAND_SET_ACTIONS = new String[]{
+            "setString", "setDouble", "setBoolean", "setInteger", "setFloat"
+    };
+    public static final String[] COMMAND_GET_ACTIONS = new String[]{
+            "getString", "getDouble", "getBoolean", "getInteger", "getFloat"
+    };
+    public static final String[] COMMAND_ALL_ACTIONS = new String[]{
+            "setString", "setDouble", "setBoolean", "setInteger", "setFloat",
+            "getString", "getDouble", "getBoolean", "getInteger", "getFloat"
+    };
+
     private final HashMap<String, String>  STRINGS  = new HashMap<>();
     private final HashMap<String, Integer> INTEGERS = new HashMap<>();
     private final HashMap<String, Double>  DOUBLES  = new HashMap<>();
