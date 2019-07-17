@@ -3,6 +3,11 @@ package fr.nathanael2611.simpledatabasemanager.core;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 
+/**
+ * Just contain a data that will be save in databases.
+ *
+ * @author Nathanael2611, Protoxy22
+ */
 public class SavedData implements INBTSerializable<NBTTagCompound> {
 
     public String key;

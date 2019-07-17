@@ -6,20 +6,26 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * This class will contain stuff to get the read-only databases
+ * that the server share with the client
+ *
+ * @author Nathanael2611
+ */
 @SideOnly(Side.CLIENT)
 public class ClientDatabases {
 
-    private static Database personalPlayerData = new Database(Minecraft.getMinecraft().player.getGameProfile().getId().toString());
+    private static DatabaseReadOnly personalPlayerData = new DatabaseReadOnly();
 
+    /**
+     * Just get the client player-data
+     */
     public static Database getPersonalPlayerData() {
         return personalPlayerData;
     }
 
-    public static void updatePersonalPlayerData(Database database){
-
+    public static void updatePersonalPlayerData(DatabaseReadOnly database){
         personalPlayerData = database;
-        DatabaseReadOnly databaseReadOnly = new DatabaseReadOnly().setBoolean("", false);
-        databaseReadOnly.setBoole
     }
 
 }

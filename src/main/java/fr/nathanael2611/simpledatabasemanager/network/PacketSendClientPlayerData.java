@@ -2,9 +2,11 @@ package fr.nathanael2611.simpledatabasemanager.network;
 
 import fr.nathanael2611.simpledatabasemanager.client.ClientDatabases;
 import fr.nathanael2611.simpledatabasemanager.core.Database;
+import fr.nathanael2611.simpledatabasemanager.core.DatabaseReadOnly;
 import fr.nathanael2611.simpledatabasemanager.core.Databases;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -12,19 +14,21 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketSendClientPlayerData implements IMessage {
 
-    private Database playerData;
+    private DatabaseReadOnly playerData;
 
     public PacketSendClientPlayerData() {
     }
 
     public PacketSendClientPlayerData(EntityPlayer player){
-        playerData = Databases.getPlayerData(player);
+        NBTTagCompound compound = Databases.getPlayerData(player).serializeNBT();
+        playerData = new DatabaseReadOnly();
+        playerData.deserializeNBT(compound);
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
 
-        playerData = new Database();
+        playerData = new DatabaseReadOnly();
         playerData.deserializeNBT(ByteBufUtils.readTag(buf));
 
     }

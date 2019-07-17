@@ -15,6 +15,13 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * The Database class.
+ * Can be serialized to nbt.
+ * Can be deserialized from nbt.
+ *
+ * @author Nathanael2611
+ */
 public class Database implements INBTSerializable<NBTTagCompound> {
     public static final String[] COMMAND_SET_ACTIONS = new String[]{
             "setString", "setDouble", "setBoolean", "setInteger", "setFloat"
@@ -45,13 +52,7 @@ public class Database implements INBTSerializable<NBTTagCompound> {
      *  String stuff
      */
     public String getString(String key){
-        if(STRINGS.containsKey(key)){
-            for(String str : STRINGS.values()){
-                System.out.println(str);
-            }
-            return STRINGS.get(key);
-        }
-        return "<undefined string>";
+        return STRINGS.get(key);
     }
     public void setString(String key, String value){
         STRINGS.put(key, value);
