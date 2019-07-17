@@ -5,6 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
+import scala.Int;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -122,12 +123,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList integerList = new NBTTagList();
         for(String str : INTEGERS.keySet()){
-            integerList.appendTag(
-                    new SavedData<Integer>(
-                            str,
-                            INTEGERS.get(str)
-                    ).serializeNBT()
-            );
+            integerList.appendTag(new SavedData<Integer>(str, INTEGERS.get(str)).serializeNBT());
         }
         compound.setTag("integers", integerList);
 
@@ -178,7 +174,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
             SavedData<String> string = new SavedData<>();
             string.deserializeNBT((NBTTagCompound) compound);
             STRINGS.put(
-                    string.key, string.value
+                    string.key, (String)string.value
             );
         }
 
@@ -190,7 +186,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
             SavedData<Integer> integer = new SavedData<>();
             integer.deserializeNBT((NBTTagCompound) compound);
             INTEGERS.put(
-                    integer.key, integer.value
+                    integer.key, (Integer)integer.value
             );
         }
 
@@ -202,7 +198,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
             SavedData<Double> doubleValue = new SavedData<>();
             doubleValue.deserializeNBT((NBTTagCompound) compound);
             DOUBLES.put(
-                    doubleValue.key, doubleValue.value
+                    doubleValue.key, (Double)doubleValue.value
             );
         }
 
@@ -214,7 +210,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
             SavedData<Float> floatValue = new SavedData<>();
             floatValue.deserializeNBT((NBTTagCompound) compound);
             FLOATS.put(
-                    floatValue.key, floatValue.value
+                    floatValue.key, (Float)floatValue.value
             );
         }
 
