@@ -110,7 +110,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
         NBTTagList stringList = new NBTTagList();
         for(String str : STRINGS.keySet()){
             stringList.appendTag(
-                    new SavedData<String>(
+                    new SavedData(
                             str,
                             STRINGS.get(str)
                     ).serializeNBT()
@@ -123,7 +123,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList integerList = new NBTTagList();
         for(String str : INTEGERS.keySet()){
-            integerList.appendTag(new SavedData<Integer>(str, INTEGERS.get(str)).serializeNBT());
+            integerList.appendTag(new SavedData(str, INTEGERS.get(str)).serializeNBT());
         }
         compound.setTag("integers", integerList);
 
@@ -133,7 +133,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
         NBTTagList doubleList = new NBTTagList();
         for(String str : DOUBLES.keySet()){
             doubleList.appendTag(
-                    new SavedData<Double>(
+                    new SavedData(
                             str,
                             DOUBLES.get(str)
                     ).serializeNBT()
@@ -147,7 +147,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
         NBTTagList floatList = new NBTTagList();
         for(String str : FLOATS.keySet()){
             floatList.appendTag(
-                    new SavedData<Float>(
+                    new SavedData(
                             str,
                             FLOATS.get(str)
                     ).serializeNBT()
@@ -171,7 +171,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList stringList = nbt.getTagList("strings", Constants.NBT.TAG_COMPOUND);
         for(NBTBase compound : stringList){
-            SavedData<String> string = new SavedData<>();
+            SavedData string = new SavedData();
             string.deserializeNBT((NBTTagCompound) compound);
             STRINGS.put(
                     string.key, (String)string.value
@@ -183,7 +183,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList integerList = nbt.getTagList("integers", Constants.NBT.TAG_COMPOUND);
         for(NBTBase compound : integerList){
-            SavedData<Integer> integer = new SavedData<>();
+            SavedData integer = new SavedData();
             integer.deserializeNBT((NBTTagCompound) compound);
             INTEGERS.put(
                     integer.key, (Integer)integer.value
@@ -195,7 +195,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList doubleList = nbt.getTagList("doubles", Constants.NBT.TAG_COMPOUND);
         for(NBTBase compound : doubleList){
-            SavedData<Double> doubleValue = new SavedData<>();
+            SavedData doubleValue = new SavedData();
             doubleValue.deserializeNBT((NBTTagCompound) compound);
             DOUBLES.put(
                     doubleValue.key, (Double)doubleValue.value
@@ -207,7 +207,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList floatList = nbt.getTagList("floats", Constants.NBT.TAG_COMPOUND);
         for(NBTBase compound : floatList){
-            SavedData<Float> floatValue = new SavedData<>();
+            SavedData floatValue = new SavedData();
             floatValue.deserializeNBT((NBTTagCompound) compound);
             FLOATS.put(
                     floatValue.key, (Float)floatValue.value
