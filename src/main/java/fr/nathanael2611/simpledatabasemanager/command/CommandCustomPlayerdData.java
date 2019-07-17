@@ -112,6 +112,8 @@ public class CommandCustomPlayerdData extends CommandBase {
                     builder.append(args[3]);
                 }
                 sender.sendMessage(new TextComponentString("§2" + actionType.substring(3) + " §a'" + args[2] + "' §2in player §a'" + playerStr + "' §2was set to §a'" + builder.toString() + "'§2."));
+            }else if(actionType.startsWith("remove")){
+                
             }
         }else{
             sender.sendMessage(correctUsage);

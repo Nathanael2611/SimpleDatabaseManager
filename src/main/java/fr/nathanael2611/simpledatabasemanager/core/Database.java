@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -29,11 +30,10 @@ public class Database implements INBTSerializable<NBTTagCompound> {
     public static final String[] COMMAND_GET_ACTIONS = new String[]{
             "getString", "getDouble", "getBoolean", "getInteger", "getFloat"
     };
-    public static final String[] COMMAND_ALL_ACTIONS = new String[]{
-            "setString", "setDouble", "setBoolean", "setInteger", "setFloat",
-            "getString", "getDouble", "getBoolean", "getInteger", "getFloat"
+    public static final String[] COMMAND_REMOVE_ACTIONS = new String[]{
+            "removeString", "removeDouble", "removeBoolean", "removeInteger", "removeFloat"
     };
-
+    public static final String[] COMMAND_ALL_ACTIONS = ArrayUtils.addAll(ArrayUtils.addAll(COMMAND_GET_ACTIONS, COMMAND_SET_ACTIONS), COMMAND_REMOVE_ACTIONS);
     private final HashMap<String, String>  STRINGS  = new HashMap<>();
     private final HashMap<String, Integer> INTEGERS = new HashMap<>();
     private final HashMap<String, Double>  DOUBLES  = new HashMap<>();
@@ -58,6 +58,9 @@ public class Database implements INBTSerializable<NBTTagCompound> {
         STRINGS.put(key, value);
         save();
     }
+    public void removeString(String key) {
+        STRINGS.remove(key);
+    }
 
 
     /**
@@ -73,6 +76,9 @@ public class Database implements INBTSerializable<NBTTagCompound> {
         INTEGERS.put(key, value);
         save();
     }
+    public void removeInteger(String key) {
+        INTEGERS.remove(key);
+    }
 
     /**
      *  Double stuff
@@ -86,6 +92,9 @@ public class Database implements INBTSerializable<NBTTagCompound> {
     public void setDouble(String key, double value){
         DOUBLES.put(key, value);
         save();
+    }
+    public void removeDouble(String key) {
+        DOUBLES.remove(key);
     }
 
     /**
@@ -101,6 +110,9 @@ public class Database implements INBTSerializable<NBTTagCompound> {
         FLOATS.put(key, value);
         save();
     }
+    public void removeFloat(String key) {
+        FLOATS.remove(key);
+    }
 
     /**
      *  Boolean stuff
@@ -114,6 +126,9 @@ public class Database implements INBTSerializable<NBTTagCompound> {
     public void setBoolean(String key, boolean value){
         BOOLEANS.put(key, value);
         save();
+    }
+    public void removeBoolean(String key) {
+        BOOLEANS.remove(key);
     }
 
     @Override
