@@ -1,14 +1,13 @@
-package fr.nathanael2611.customplayerdata.core;
+package fr.nathanael2611.simpledatabasemanager.core;
 
+import fr.nathanael2611.simpledatabasemanager.util.Helpers;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Database implements INBTSerializable<NBTTagCompound> {
 
@@ -235,52 +234,22 @@ public class Database implements INBTSerializable<NBTTagCompound> {
     }
 
     public String[] getAllStringEntry(){
-        String[] strings = new String[STRINGS.size()];
-        int i = 0;
-        for(String str : STRINGS.keySet()) {
-            strings[i] = str;
-            i++;
-        }
-        return strings;
+        return Helpers.extractAllHashMapEntryNames(STRINGS);
     }
 
     public String[] getAllIntegerEntry(){
-        String[] strings = new String[INTEGERS.size()];
-        int i = 0;
-        for(String str : INTEGERS.keySet()) {
-            strings[i] = str;
-            i++;
-        }
-        return strings;
+        return Helpers.extractAllHashMapEntryNames(INTEGERS);
     }
 
     public String[] getAllDoubleEntry(){
-        String[] strings = new String[DOUBLES.size()];
-        int i = 0;
-        for(String str : DOUBLES.keySet()) {
-            strings[i] = str;
-            i++;
-        }
-        return strings;
+        return Helpers.extractAllHashMapEntryNames(DOUBLES);
     }
 
     public String[] getAllFloatEntry(){
-        String[] strings = new String[FLOATS.size()];
-        int i = 0;
-        for(String str : FLOATS.keySet()) {
-            strings[i] = str;
-            i++;
-        }
-        return strings;
+        return Helpers.extractAllHashMapEntryNames(FLOATS);
     }
 
     public String[] getAllBooleanEntry(){
-        String[] strings = new String[BOOLEANS.size()];
-        int i = 0;
-        for(String str : BOOLEANS.keySet()) {
-            strings[i] = str;
-            i++;
-        }
-        return strings;
+        return Helpers.extractAllHashMapEntryNames(BOOLEANS);
     }
 }

@@ -1,8 +1,8 @@
-package fr.nathanael2611.customplayerdata.command;
+package fr.nathanael2611.simpledatabasemanager.command;
 
-import fr.nathanael2611.customplayerdata.core.Database;
-import fr.nathanael2611.customplayerdata.core.Databases;
-import fr.nathanael2611.customplayerdata.util.Helpers;
+import fr.nathanael2611.simpledatabasemanager.core.Database;
+import fr.nathanael2611.simpledatabasemanager.core.Databases;
+import fr.nathanael2611.simpledatabasemanager.util.Helpers;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -13,7 +13,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

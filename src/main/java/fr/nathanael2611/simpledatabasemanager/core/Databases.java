@@ -1,5 +1,6 @@
-package fr.nathanael2611.customplayerdata.core;
+package fr.nathanael2611.simpledatabasemanager.core;
 
+import fr.nathanael2611.simpledatabasemanager.util.Helpers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -80,6 +81,8 @@ public class Databases extends WorldSavedData {
     }
 
     public static void onServerStarting(FMLServerStartingEvent event) {
+        DATABASES.clear();
+        PLAYERDATAS.clear();
         if (!event.getServer().getEntityWorld().isRemote) {
             MapStorage storage = event.getServer().getEntityWorld().getMapStorage();
             Databases data = (Databases) storage.getOrLoadData(Databases.class, "customplayerdata");
@@ -89,5 +92,9 @@ public class Databases extends WorldSavedData {
             }
             INSTANCE = data;
         }
+    }
+
+    public static String[] getAllDatabasesNames(){
+        return Helpers.extractAllHashMapEntryNames(DATABASES);
     }
 }

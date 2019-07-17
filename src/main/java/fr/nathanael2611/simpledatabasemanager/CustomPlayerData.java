@@ -1,8 +1,9 @@
-package fr.nathanael2611.customplayerdata;
+package fr.nathanael2611.simpledatabasemanager;
 
-import fr.nathanael2611.customplayerdata.command.CommandCustomPlayerdData;
-import fr.nathanael2611.customplayerdata.core.Databases;
-import fr.nathanael2611.customplayerdata.proxy.CommonProxy;
+import fr.nathanael2611.simpledatabasemanager.command.CommandCustomPlayerdData;
+import fr.nathanael2611.simpledatabasemanager.command.CommandDatabase;
+import fr.nathanael2611.simpledatabasemanager.core.Databases;
+import fr.nathanael2611.simpledatabasemanager.proxy.CommonProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -46,6 +47,7 @@ public class CustomPlayerData {
     public void onServerStarting(FMLServerStartingEvent e){
         Databases.onServerStarting(e);
         e.registerServerCommand(new CommandCustomPlayerdData());
+        e.registerServerCommand(new CommandDatabase());
     }
 
 }

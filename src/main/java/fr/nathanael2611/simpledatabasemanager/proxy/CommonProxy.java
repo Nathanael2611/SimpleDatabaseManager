@@ -1,4 +1,4 @@
-package fr.nathanael2611.customplayerdata.proxy;
+package fr.nathanael2611.simpledatabasemanager.proxy;
 
 import java.io.File;
 
