@@ -1,5 +1,6 @@
 package fr.nathanael2611.customplayerdata.core;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
 

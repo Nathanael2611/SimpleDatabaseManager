@@ -5,12 +5,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
-import scala.Int;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
+import java.util.List;
 
-public class PlayerData implements INBTSerializable<NBTTagCompound> {
+public class Database implements INBTSerializable<NBTTagCompound> {
 
     private final HashMap<String, String>  STRINGS  = new HashMap<>();
     private final HashMap<String, Integer> INTEGERS = new HashMap<>();
@@ -18,12 +18,12 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
     private final HashMap<String, Float>   FLOATS   = new HashMap<>();
     private final HashMap<String, Boolean> BOOLEANS = new HashMap<>();
 
-    private UUID uuid;
+    private String dbName;
 
-    public PlayerData(){}
+    public Database(){}
 
-    public PlayerData(UUID uuid){
-        this.uuid = uuid;
+    public Database(String dbName){
+        this.dbName = dbName;
     }
 
     /**
@@ -40,7 +40,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
     }
     public void setString(String key, String value){
         STRINGS.put(key, value);
-        PlayerDatas.save();
+        Databases.save();
     }
 
 
@@ -55,7 +55,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
     }
     public void setInteger(String key, int value){
         INTEGERS.put(key, value);
-        PlayerDatas.save();
+        Databases.save();
     }
 
     /**
@@ -69,7 +69,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
     }
     public void setDouble(String key, double value){
         DOUBLES.put(key, value);
-        PlayerDatas.save();
+        Databases.save();
     }
 
     /**
@@ -83,7 +83,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
     }
     public void setFloat(String key, float value){
         FLOATS.put(key, value);
-        PlayerDatas.save();
+        Databases.save();
     }
 
     /**
@@ -97,7 +97,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
     }
     public void setBoolean(String key, boolean value){
         BOOLEANS.put(key, value);
-        PlayerDatas.save();
+        Databases.save();
     }
 
     @Override
@@ -156,9 +156,9 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
         compound.setTag("floats", floatList);
 
         /**
-         * Saving the player-uuid
+         * Saving the database-name
          */
-        compound.setUniqueId("uuid", uuid);
+        compound.setString("dbname", dbName);
 
         return compound;
     }
@@ -215,11 +215,61 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
         /**
          * Read the player-uuid
          */
-        this.uuid = nbt.getUniqueId("uuid");
+        this.dbName = nbt.getString("dbname");
 
     }
 
-    public UUID getUUID() {
-        return uuid;
+    public String getDbName() {
+        return dbName;
+    }
+
+    public String[] getAllStringEntry(){
+        String[] strings = new String[STRINGS.size()];
+        int i = 0;
+        for(String str : STRINGS.keySet()) {
+            strings[i] = str;
+            i++;
+        }
+        return strings;
+    }
+
+    public String[] getAllIntegerEntry(){
+        String[] strings = new String[INTEGERS.size()];
+        int i = 0;
+        for(String str : INTEGERS.keySet()) {
+            strings[i] = str;
+            i++;
+        }
+        return strings;
+    }
+
+    public String[] getAllDoubleEntry(){
+        String[] strings = new String[DOUBLES.size()];
+        int i = 0;
+        for(String str : DOUBLES.keySet()) {
+            strings[i] = str;
+            i++;
+        }
+        return strings;
+    }
+
+    public String[] getAllFloatEntry(){
+        String[] strings = new String[FLOATS.size()];
+        int i = 0;
+        for(String str : FLOATS.keySet()) {
+            strings[i] = str;
+            i++;
+        }
+        return strings;
+    }
+
+    public String[] getAllBooleanEntry(){
+        String[] strings = new String[BOOLEANS.size()];
+        int i = 0;
+        for(String str : BOOLEANS.keySet()) {
+            strings[i] = str;
+            i++;
+        }
+        return strings;
     }
 }
