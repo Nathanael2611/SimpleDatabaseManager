@@ -273,12 +273,16 @@ public class Database implements INBTSerializable<NBTTagCompound> {
 
     public void save(){
         Databases.save();
-        EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(UUID.fromString(this.id));
-        if(player != null){
-            PacketHandler.getNetwork().sendTo(
-                    new PacketSendClientPlayerData(player), player
-            );
+        try {
+            EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(UUID.fromString(this.id));
+            if(player != null){
+                PacketHandler.getNetwork().sendTo(
+                        new PacketSendClientPlayerData(player), player
+                );
+            }
+        } catch (Exception ex) {
         }
+
     }
 
 }
