@@ -10,7 +10,6 @@ import net.minecraftforge.common.util.INBTSerializable;
 import java.util.HashMap;
 
 public class Database implements INBTSerializable<NBTTagCompound> {
-
     public static final String[] COMMAND_SET_ACTIONS = new String[]{
             "setString", "setDouble", "setBoolean", "setInteger", "setFloat"
     };
@@ -28,12 +27,12 @@ public class Database implements INBTSerializable<NBTTagCompound> {
     private final HashMap<String, Float>   FLOATS   = new HashMap<>();
     private final HashMap<String, Boolean> BOOLEANS = new HashMap<>();
 
-    private String dbName;
+    private String id;
 
     public Database(){}
 
-    public Database(String dbName){
-        this.dbName = dbName;
+    public Database(String id){
+        this.id = id;
     }
 
     /**
@@ -166,9 +165,9 @@ public class Database implements INBTSerializable<NBTTagCompound> {
         compound.setTag("floats", floatList);
 
         /**
-         * Saving the database-name
+         * Saving the player-id
          */
-        compound.setString("dbname", dbName);
+        compound.setString("id", id);
 
         return compound;
     }
@@ -223,32 +222,44 @@ public class Database implements INBTSerializable<NBTTagCompound> {
         }
 
         /**
-         * Read the player-uuid
+         * Read the player-id
          */
-        this.dbName = nbt.getString("dbname");
+        this.id = nbt.getString("id");
 
     }
 
-    public String getDbName() {
-        return dbName;
+    public String getId() {
+        return id;
     }
 
     public String[] getAllStringEntry(){
         return Helpers.extractAllHashMapEntryNames(STRINGS);
     }
 
+    /**
+     * Get all the integers keys stored in the database
+     */
     public String[] getAllIntegerEntry(){
         return Helpers.extractAllHashMapEntryNames(INTEGERS);
     }
 
+    /**
+     * Get all the doubles keys stored in the database
+     */
     public String[] getAllDoubleEntry(){
         return Helpers.extractAllHashMapEntryNames(DOUBLES);
     }
 
+    /**
+     * Get all the floats keys stored in the database
+     */
     public String[] getAllFloatEntry(){
         return Helpers.extractAllHashMapEntryNames(FLOATS);
     }
 
+    /**
+     * Get all the booleans keys stored in the database
+     */
     public String[] getAllBooleanEntry(){
         return Helpers.extractAllHashMapEntryNames(BOOLEANS);
     }

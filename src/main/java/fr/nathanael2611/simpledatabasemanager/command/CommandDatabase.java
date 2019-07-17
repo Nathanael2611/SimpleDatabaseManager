@@ -6,9 +6,11 @@ import fr.nathanael2611.simpledatabasemanager.util.Helpers;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -118,6 +120,50 @@ public class CommandDatabase extends CommandBase {
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         if(args.length == 1){
             return getListOfStringsMatchingLastWord(args, Databases.getAllDatabasesNames());
+        }
+        if(args.length == 2)
+            return getListOfStringsMatchingLastWord(
+                    args,
+                    Database.COMMAND_ALL_ACTIONS
+            );
+        if(args.length == 3){
+            EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(args[0]);
+            if(player != null){
+                System.out.println(args[1]);
+                if(args[1].contains("String")){
+                    System.out.println("pas foufou x)");
+                    return getListOfStringsMatchingLastWord(
+                            args,
+                            Databases.getPlayerData(player).getAllStringEntry()
+                    );
+                }
+                if(args[1].contains("Integer")){
+                    return getListOfStringsMatchingLastWord(
+                            args,
+                            Databases.getPlayerData(player).getAllIntegerEntry()
+                    );
+                }
+                if(args[1].contains("Double")){
+                    return getListOfStringsMatchingLastWord(
+                            args,
+                            Databases.getPlayerData(player).getAllDoubleEntry()
+                    );
+                }
+                if(args[1].contains("Float")){
+                    return getListOfStringsMatchingLastWord(
+                            args,
+                            Databases.getPlayerData(player).getAllFloatEntry()
+                    );
+                }
+                if(args[1].contains("Boolean")){
+                    return getListOfStringsMatchingLastWord(
+                            args,
+                            Databases.getPlayerData(player).getAllBooleanEntry()
+                    );
+                }
+
+            }
+
         }
         return super.getTabCompletions(server, sender, args, targetPos);
     }

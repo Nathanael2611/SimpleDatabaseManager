@@ -13,8 +13,8 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 @Mod(modid = "customplayerdata")
 public class CustomPlayerData {
 
-    public static final String MOD_ID = "customplayerdata";
-    public static final String MOD_NAME = "CustomPlayerData";
+    public static final String MOD_ID = "simpledatabasemanager";
+    public static final String MOD_NAME = "SimpleDatabaseManager";
 
     @SidedProxy(
             serverSide = "fr.nathanael2611.simpledatabasemanager.proxy.ServerProxy",

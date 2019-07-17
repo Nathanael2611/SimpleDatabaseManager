@@ -46,43 +46,41 @@ public class Databases extends WorldSavedData {
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         PLAYERDATAS.clear();
-        DATABASES.clear();
-
-        NBTTagList dataList = nbt.getTagList("playerdatas", Constants.NBT.TAG_COMPOUND);
-        for (int i = 0; i < dataList.tagCount(); i++) {
+        NBTTagList playerDataList = nbt.getTagList("playerdatas", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < playerDataList.tagCount(); i++) {
             Database data = new Database();
-            data.deserializeNBT(dataList.getCompoundTagAt(i));
-            PLAYERDATAS.put(UUID.fromString(data.getDbName()), data);
+            data.deserializeNBT(playerDataList.getCompoundTagAt(i));
+            PLAYERDATAS.put(UUID.fromString(data.getId()), data);
         }
 
+        DATABASES.clear();
         NBTTagList databaseList = nbt.getTagList("databases", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < databaseList.tagCount(); i++) {
             Database data = new Database();
             data.deserializeNBT(databaseList.getCompoundTagAt(i));
-            DATABASES.put(data.getDbName(), data);
+            DATABASES.put(data.getId(), data);
         }
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        NBTTagList dataList = new NBTTagList();
+        NBTTagList playerdataList = new NBTTagList();
         for (Database playerData : PLAYERDATAS.values()) {
-            dataList.appendTag(playerData.serializeNBT());
+            playerdataList.appendTag(playerData.serializeNBT());
         }
-        compound.setTag("playerdatas", dataList);
+        compound.setTag("playerdatas", playerdataList);
 
-        NBTTagList databasesList = new NBTTagList();
+        NBTTagList databaseList = new NBTTagList();
         for (Database database : DATABASES.values()) {
-            databasesList.appendTag(database.serializeNBT());
+            databaseList.appendTag(database.serializeNBT());
         }
-        compound.setTag("databases", dataList);
-
+        compound.setTag("databases", databaseList);
         return compound;
     }
 
     public static void onServerStarting(FMLServerStartingEvent event) {
-        DATABASES.clear();
         PLAYERDATAS.clear();
+        DATABASES.clear();
         if (!event.getServer().getEntityWorld().isRemote) {
             MapStorage storage = event.getServer().getEntityWorld().getMapStorage();
             Databases data = (Databases) storage.getOrLoadData(Databases.class, "simpledatabasemanager");
