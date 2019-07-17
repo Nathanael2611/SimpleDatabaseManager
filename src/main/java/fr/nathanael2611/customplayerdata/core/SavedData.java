@@ -7,6 +7,7 @@ public class SavedData implements INBTSerializable<NBTTagCompound> {
 
     public String key;
     public Object value;
+    public Class object;
 
     public SavedData(String key, Object value) {
         this.key = key;
@@ -14,6 +15,10 @@ public class SavedData implements INBTSerializable<NBTTagCompound> {
     }
 
     public SavedData() {
+    }
+
+    public SavedData(Class object) {
+        this.object = object;
     }
 
     @Override
@@ -40,19 +45,19 @@ public class SavedData implements INBTSerializable<NBTTagCompound> {
         key = nbt.getString("key");
         System.out.println(" ouf quoi :/");
 
-        if (value instanceof String) {
+        if (object.equals(String.class)) {
             this.value = nbt.getString("value");
         }
-        if (value instanceof Integer) {
+        if (object.equals(Integer.class)) {
             this.value = nbt.getInteger("value");
         }
-        if (value instanceof Double) {
+        if (object.equals(Double.class)) {
             this.value = nbt.getDouble("value");
         }
-        if (value instanceof Float) {
+        if (object.equals(Float.class)) {
             this.value = nbt.getFloat("value");
         }
-        if (value instanceof Boolean) {
+        if (object.equals(Boolean.class)) {
             this.value = nbt.getBoolean("value");
         }
     }

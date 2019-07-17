@@ -171,11 +171,9 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList stringList = nbt.getTagList("strings", Constants.NBT.TAG_COMPOUND);
         for(NBTBase compound : stringList){
-            SavedData string = new SavedData();
+            SavedData string = new SavedData(String.class);
             string.deserializeNBT((NBTTagCompound) compound);
-            STRINGS.put(
-                    string.key, (String)string.value
-            );
+            STRINGS.put(string.key, (String)string.value);
         }
 
         /**
@@ -183,7 +181,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList integerList = nbt.getTagList("integers", Constants.NBT.TAG_COMPOUND);
         for(NBTBase compound : integerList){
-            SavedData integer = new SavedData();
+            SavedData integer = new SavedData(Integer.class);
             integer.deserializeNBT((NBTTagCompound) compound);
             INTEGERS.put(
                     integer.key, (Integer)integer.value
@@ -195,7 +193,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList doubleList = nbt.getTagList("doubles", Constants.NBT.TAG_COMPOUND);
         for(NBTBase compound : doubleList){
-            SavedData doubleValue = new SavedData();
+            SavedData doubleValue = new SavedData(Double.class);
             doubleValue.deserializeNBT((NBTTagCompound) compound);
             DOUBLES.put(
                     doubleValue.key, (Double)doubleValue.value
@@ -207,7 +205,7 @@ public class PlayerData implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList floatList = nbt.getTagList("floats", Constants.NBT.TAG_COMPOUND);
         for(NBTBase compound : floatList){
-            SavedData floatValue = new SavedData();
+            SavedData floatValue = new SavedData(Float.class);
             floatValue.deserializeNBT((NBTTagCompound) compound);
             FLOATS.put(
                     floatValue.key, (Float)floatValue.value
