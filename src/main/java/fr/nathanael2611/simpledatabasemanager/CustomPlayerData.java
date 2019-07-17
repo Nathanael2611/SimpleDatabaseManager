@@ -17,8 +17,8 @@ public class CustomPlayerData {
     public static final String MOD_NAME = "CustomPlayerData";
 
     @SidedProxy(
-            serverSide = "fr.nathanael2611.customplayerdata.proxy.ServerProxy",
-            clientSide = "fr.nathanael2611.customplayerdata.proxy.ClientProxy"
+            serverSide = "fr.nathanael2611.simpledatabasemanager.proxy.ServerProxy",
+            clientSide = "fr.nathanael2611.simpledatabasemanager.proxy.ClientProxy"
     )
     private static CommonProxy proxy;
 
