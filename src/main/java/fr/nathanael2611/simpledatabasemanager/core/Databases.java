@@ -72,8 +72,8 @@ public class Databases extends WorldSavedData {
         compound.setTag("playerdatas", dataList);
 
         NBTTagList databasesList = new NBTTagList();
-        for (Database playerData : DATABASES.values()) {
-            databasesList.appendTag(playerData.serializeNBT());
+        for (Database database : DATABASES.values()) {
+            databasesList.appendTag(database.serializeNBT());
         }
         compound.setTag("databases", dataList);
 
@@ -85,10 +85,10 @@ public class Databases extends WorldSavedData {
         PLAYERDATAS.clear();
         if (!event.getServer().getEntityWorld().isRemote) {
             MapStorage storage = event.getServer().getEntityWorld().getMapStorage();
-            Databases data = (Databases) storage.getOrLoadData(Databases.class, "customplayerdata");
+            Databases data = (Databases) storage.getOrLoadData(Databases.class, "simpledatabasemanager");
             if (data == null) {
-                data = new Databases("customplayerdata");
-                storage.setData("customplayerdata", data);
+                data = new Databases("simpledatabasemanager");
+                storage.setData("simpledatabasemanager", data);
             }
             INSTANCE = data;
         }

@@ -43,7 +43,6 @@ public class SavedData implements INBTSerializable<NBTTagCompound> {
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
         key = nbt.getString("key");
-        System.out.println(" ouf quoi :/");
 
         if (object.equals(String.class)) {
             this.value = nbt.getString("value");
