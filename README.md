@@ -1,4 +1,7 @@
 # SimpleDatabaseManager, qu'est-ce que c'est ?
+
+<details>
+  <summary>French description</summary>
 SimpleDatabaseManager est, avant-tout une lib pour vous les développeurs de mod minecraft !
 La sauvegarde de données persistantes n'est pas une tâche facile, si vous débutez, vous savez de quoi je parle !
 Si vous créez une variable à laquelle vous assignez une valeur, quand vous relancerez votre jeu, elle aura été reinitialisée.
@@ -8,6 +11,8 @@ En plus d'ajouter un système de base de données persistantes, SimpleDatabaseMa
 Dès lors le client pourra avoir l'accès en lecture à toutes les données présentes dans la base de données lui étant assignée. 
 Vous pouvez aussi choisir de partager certaines base de donnée (en lecture seulement) avec des EntityPlayer de votre choix.
 En résumé, SimpleDatabaseManager est une lib permettant de stocker facilement des données persistantes, mais aussi de les synchroniser entre le server et le client.
+</details>
+
 
 # Mais ? Comment ça marche ?
 Premièrement, télécharger la dernière release de SimpleDatabaseManager et ajoutez-la en dépendance de votre mod. (que ce soit avec gradle ou depuis votre IDE directement)
