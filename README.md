@@ -53,4 +53,13 @@ EntityPlayer player = /* Votre instance d'EntityPlayer */;
 Database playerdata = Databases.getPlayerData(player);
 ```
 Après comme c'est une database comme les autres, vous vous en servez, bah, comme les autres. x)
-
+## Synchronisation des base de données
+Comme dit dans le paragraphe de présentation, SimpleDatabaseManager gère aussi la synchronisation entre le client et le serveur !
+Voici comment l'utiliser;
+### Synchronisation des playerdatas
+La synchronisation des playerdata est gérée **automatiquement** le clien à accès en lecture au playerdata du joueur lui étant assigné.
+Pour accéder **DEPUIS LE CLIENT** à votre playerdata, c'est comme ça:
+```JAVA
+DatabaseReadOnly playerData = ClientDatabases.getPersonalPlayerData();
+```
+:warning: Attention, n'essayez pas d'utiliser les méthodes de set de valeurs dans une instance de DatabaseReadOnly, les bases de données client ne sont accessible qu'en lecture. Vous ne pouvez pas écrire dedans ! :warning:
