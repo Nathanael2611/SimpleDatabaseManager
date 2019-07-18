@@ -1,7 +1,7 @@
 # SimpleDatabaseManager, qu'est-ce que c'est ?
 
 <details>
-  <summary>French description</summary>
+  <summary>=== French description</summary>
     SimpleDatabaseManager est, avant-tout une lib pour vous les développeurs de mod minecraft !
     La sauvegarde de données persistantes n'est pas une tâche facile, si vous débutez, vous savez de quoi je parle !
     Si vous créez une variable à laquelle vous assignez une valeur, quand vous relancerez votre jeu, elle aura été reinitialisée.
