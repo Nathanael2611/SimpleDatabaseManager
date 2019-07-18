@@ -12,6 +12,18 @@ Dès lors le client pourra avoir l'accès en lecture à toutes les données pré
 Vous pouvez aussi choisir de partager certaines base de donnée (en lecture seulement) avec des EntityPlayer de votre choix.
 En résumé, SimpleDatabaseManager est une lib permettant de stocker facilement des données persistantes, mais aussi de les synchroniser entre le server et le client.
 </details>
+<details>
+  <summary>English description</summary>
+  SimpleDatabaseManager is, above all, a lib for you minecraft mod developers!
+Backing up persistent data is not an easy task, if you are a beginner, you know what I mean!
+If you create a variable to which you assign a value, when you restart your game, it will have been reset.
+Well, SimpleDatabaseManager against this problem by offering a data management system in the players (each player has an assigned database) as well as a database system that you can access with their name!
+In these "databases" you can store integers, doubles, floats, thongs, as well as boolans! And of course this data is persistent, SimpleDatabaseManager takes care of everything!
+In addition to adding a persistent database system, SimpleDatabaseManager does not stop there, it also allows you to synchronize a player's data with it. 
+From then on, the customer will be able to have read access to all the data present in the database assigned to him. 
+You can also choose to share some databases (read only) with EntityPlayers of your choice.
+In short, SimpleDatabaseManager is a lib that allows you to easily store persistent data, but also to synchronize them between the server and the client.
+</details>
 
 
 # Mais ? Comment ça marche ?
