@@ -288,16 +288,16 @@ public class Database implements INBTSerializable<NBTTagCompound> {
 
     public void save(){
         Databases.save();
-        try {
-            EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUUID(UUID.fromString(this.id));
-            if(player != null){
-                PacketHandler.getNetwork().sendTo(
-                        new PacketSendClientPlayerData(player), player
-                );
-            }
-        } catch (Exception ex) {
-        }
 
+    }
+
+    /**
+     * Convert database to read-only one
+     */
+    public DatabaseReadOnly toReadOnly(){
+        DatabaseReadOnly readOnly = new DatabaseReadOnly();
+        readOnly.deserializeNBT(this.serializeNBT());
+        return readOnly;
     }
 
 }

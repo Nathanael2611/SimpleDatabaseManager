@@ -1,8 +1,11 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
 import javax.annotation.PreDestroy;
+import java.util.HashMap;
 
 public class DatabaseReadOnly extends Database {
+
+
 
     public void printNoPermMessage(){
         System.err.println("Cannot write read-only databases");

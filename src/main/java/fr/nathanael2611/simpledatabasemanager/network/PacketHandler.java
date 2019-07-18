@@ -10,29 +10,22 @@ import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketHandler {
 
-    private static SimpleNetworkWrapper network;
-    private static int nextId = 1;
+    public static SimpleNetworkWrapper network;
 
-    public static void initPackets(){
-        network = NetworkRegistry.INSTANCE.newSimpleChannel(SimpleDatabaseManager.MOD_ID.toUpperCase());
-
-        registerMessage(
-                PacketSendClientPlayerData.Handler.class,
+    public static void initPackets() {
+        PacketHandler.network = NetworkRegistry.INSTANCE.newSimpleChannel(SimpleDatabaseManager.MOD_ID.toUpperCase());
+        PacketHandler.network.registerMessage(
+                PacketSendClientPlayerData.Message.class,
                 PacketSendClientPlayerData.class,
+                1,
+                Side.CLIENT
+        );
+        PacketHandler.network.registerMessage(
+                PacketSendDatabaseToClient.Message.class,
+                PacketSendDatabaseToClient.class,
+                2,
                 Side.CLIENT
         );
     }
 
-    private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(
-            Class<? extends IMessageHandler<REQ, REPLY>> messageHandler,
-            Class<REQ> requestMessageType,
-            Side side
-    ) {
-        network.registerMessage(messageHandler, requestMessageType, nextId++, side);
-
-    }
-
-    public static SimpleNetworkWrapper getNetwork() {
-        return network;
-    }
 }

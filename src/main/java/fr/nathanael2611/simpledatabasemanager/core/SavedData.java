@@ -31,7 +31,7 @@ public class SavedData implements INBTSerializable<NBTTagCompound> {
         NBTTagCompound compound = new NBTTagCompound();
         compound.setString("key", key);
 
-        if(value instanceof String)        compound.setString("value", (String) value)
+        if(value instanceof String)        compound.setString("value", (String) value);
         else if (value instanceof Integer) compound.setInteger("value", (Integer) value);
         else if (value instanceof Double)  compound.setDouble("value", (Double) value);
         else if (value instanceof Float)   compound.setFloat("value", (Float) value);

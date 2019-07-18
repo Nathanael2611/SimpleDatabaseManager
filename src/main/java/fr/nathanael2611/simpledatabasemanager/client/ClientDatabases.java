@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.HashMap;
+
 /**
  * This class will contain stuff to get the read-only databases
  * that the server share with the client
@@ -27,5 +29,11 @@ public class ClientDatabases {
     public static void updatePersonalPlayerData(DatabaseReadOnly database){
         personalPlayerData = database;
     }
+
+    /**
+     * The databases hashmap
+     */
+    public static final HashMap<String, DatabaseReadOnly> CLIENT_DATABASES = new HashMap<>();
+
 
 }

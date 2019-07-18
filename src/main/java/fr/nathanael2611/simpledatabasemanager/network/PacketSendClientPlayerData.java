@@ -5,49 +5,48 @@ import fr.nathanael2611.simpledatabasemanager.core.Database;
 import fr.nathanael2611.simpledatabasemanager.core.DatabaseReadOnly;
 import fr.nathanael2611.simpledatabasemanager.core.Databases;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PacketSendClientPlayerData implements IMessage {
 
-    private DatabaseReadOnly playerData;
+    private NBTTagCompound compound;
 
     public PacketSendClientPlayerData() {
     }
 
-    public PacketSendClientPlayerData(EntityPlayer player){
+    public PacketSendClientPlayerData(EntityPlayer player) {
         NBTTagCompound compound = Databases.getPlayerData(player).serializeNBT();
-        playerData = new DatabaseReadOnly();
-        playerData.deserializeNBT(compound);
+        this.compound = compound;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
-
-        playerData = new DatabaseReadOnly();
-        playerData.deserializeNBT(ByteBufUtils.readTag(buf));
-
+        compound = ByteBufUtils.readTag(buf);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-
-        ByteBufUtils.writeTag(buf, playerData.serializeNBT());
-
+        ByteBufUtils.writeTag(buf, compound);
     }
 
-    public static class Handler implements IMessageHandler<PacketSendClientPlayerData, IMessage> {
-
-
+    public static class Message implements IMessageHandler<PacketSendClientPlayerData, IMessage> {
+        @SideOnly(Side.CLIENT)
         @Override
         public IMessage onMessage(PacketSendClientPlayerData message, MessageContext ctx) {
-
-            ClientDatabases.updatePersonalPlayerData(message.playerData);
-
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+                DatabaseReadOnly playerData = new DatabaseReadOnly();
+                playerData.deserializeNBT(message.compound);
+                ClientDatabases.updatePersonalPlayerData(playerData);
+                return;
+            });
             return null;
         }
     }

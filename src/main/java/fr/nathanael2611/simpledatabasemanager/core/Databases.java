@@ -1,13 +1,17 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
 import fr.nathanael2611.simpledatabasemanager.SimpleDatabaseManager;
+import fr.nathanael2611.simpledatabasemanager.network.PacketHandler;
+import fr.nathanael2611.simpledatabasemanager.network.PacketSendClientPlayerData;
 import fr.nathanael2611.simpledatabasemanager.util.Helpers;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 import java.util.HashMap;
@@ -16,10 +20,16 @@ import java.util.UUID;
 public class Databases extends WorldSavedData {
     private static Databases instance;
 
-    public static final HashMap<UUID, Database> PLAYERDATAS = new HashMap<UUID, Database>();
+    public static final HashMap<String, Database> PLAYERDATAS = new HashMap<String, Database>();
     public static final HashMap<String, Database> DATABASES = new HashMap<String, Database>();
 
     public static void save() {
+        SyncedDatabases.syncAll();
+        for(EntityPlayerMP entityPlayerMP : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()){
+            PacketHandler.network.sendTo(
+                    new PacketSendClientPlayerData(entityPlayerMP), entityPlayerMP
+            );
+        }
         if (instance != null) {
             instance.markDirty();
         }
@@ -30,11 +40,11 @@ public class Databases extends WorldSavedData {
     }
 
     public static Database getPlayerData(EntityPlayer player){
-        UUID playerUUID = player.getGameProfile().getId();
-        if(!PLAYERDATAS.containsKey(playerUUID)){
-            PLAYERDATAS.put(playerUUID, new Database(playerUUID.toString()));
+        String playerName = player.getGameProfile().getName();
+        if(!PLAYERDATAS.containsKey(playerName)){
+            PLAYERDATAS.put(playerName, new Database(playerName));
         }
-        return PLAYERDATAS.get(playerUUID);
+        return PLAYERDATAS.get(playerName);
     }
 
     public static Database getDatabase(String dbName){
@@ -55,7 +65,7 @@ public class Databases extends WorldSavedData {
         for (int i = 0; i < playerDataList.tagCount(); i++) {
             Database data = new Database();
             data.deserializeNBT(playerDataList.getCompoundTagAt(i));
-            PLAYERDATAS.put(UUID.fromString(data.getId()), data);
+            PLAYERDATAS.put(data.getId(), data);
         }
 
         DATABASES.clear();
