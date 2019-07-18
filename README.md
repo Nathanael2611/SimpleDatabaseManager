@@ -8,3 +8,14 @@ En plus d'ajouter un système de base de données persistantes, SimpleDatabaseMa
 Dès lors le client pourra avoir l'accès en lecture à toutes les données présentes dans la base de données lui étant assignée. 
 Vous pouvez aussi choisir de partager certaines base de donnée (en lecture seulement) avec des EntityPlayer de votre choix.
 En résumé, SimpleDatabaseManager est une lib permettant de stocker facilement des données persistantes, mais aussi de les synchroniser entre le server et le client.
+
+# Mais ? Comment ça marche ?
+Premièrement, télécharger la dernière release de SimpleDatabaseManager et ajoutez-la en dépendance de votre mod. (que ce soit avec gradle ou depuis votre IDE directement)
+Et c'est tout ! Désormais, passons au code:
+
+## Stocker du data dans une base de donnée
+Premièrement, vous allez devoir get la base de donnée via son nom (la création se fait automatiquement si vous gettez une db inexistante), pour ce faire:
+```JAVA
+Database db = Databases.getDatabase("votre_database");
+```
+Nous avons donc créer une instance de notre base de donnée nommée "db".
