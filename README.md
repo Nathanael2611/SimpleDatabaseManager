@@ -45,3 +45,12 @@ double d = db.getDouble("doubletest"); // d sera égal à 2.0
 float f = db.getFloat("floattest"); // f sera égal à 47.9f
 boolean b = db.getBoolean("booleantest"); // b sera égal à true
 ```
+Bien entendu, le nom des variables dans lesquelles vous lisez les valeurs n'a aucune importance (je préfère le préciser, car avec certains :rolling_eyes:
+### Stocker des valeurs dans un joueur
+Comme je vous l'ai dit, chaque joueur possède une database qui lui est dédiée, vous pouvez donc get cette fameuse database comme ceci:
+```JAVA
+EntityPlayer player = /* Votre instance d'EntityPlayer */;
+Database playerdata = Databases.getPlayerData(player);
+```
+Après comme c'est une database comme les autres, vous vous en servez, bah, comme les autres. x)
+
