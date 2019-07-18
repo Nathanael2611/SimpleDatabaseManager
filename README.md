@@ -14,8 +14,34 @@ Premièrement, télécharger la dernière release de SimpleDatabaseManager et aj
 Et c'est tout ! Désormais, passons au code:
 
 ## Stocker du data dans une base de donnée
+### Récupérer une base de donnée via son nom
 Premièrement, vous allez devoir get la base de donnée via son nom (la création se fait automatiquement si vous gettez une db inexistante), pour ce faire:
 ```JAVA
 Database db = Databases.getDatabase("votre_database");
 ```
 Nous avons donc créer une instance de notre base de donnée nommée "db".
+### Stocker des valeurs
+C'est bien beau d'avoir une base de donnée, mais elle ne contient pour le moment rien du tout !
+Pour lui assigner des valeurs vous pouvez vous y prendre ainsi:
+```JAVA
+Database db = Databases.getDatabase("votre_database");
+db.setString("stringtest", "mon string de test");
+db.setInteger("integertest", 3);
+db.setDouble("doubletest", 2.0);
+db.setFloat("floattest", 47.9f);
+db.setBoolean("booleantest", true);
+```
+Simple ? Non ?
+En fait, c'est un peu comme les HashMap, ça fonctionne avec un système de valeur, assignée à une clé.
+Toutes les méthodes de set contienne en premier argument la clé, et en deuxième argument la valeur ! 
+### Lire des valeurs
+Bon, maintenant qu'on sait stocker des valeurs, il faut bien savoir les récupérer... Sinon le système serait inutile.
+Et bien c'est tout simple:
+```JAVA
+Database db = Databases.getDatabase("votre_database");
+String str = db.getString("stringtest"); // str sera égal à "mon string de test"
+int entier = db.getInteger("integertest"); // entier sera égal à 3
+double d = db.getDouble("doubletest"); // d sera égal à 2.0
+float f = db.getFloat("floattest"); // f sera égal à 47.9f
+boolean b = db.getBoolean("booleantest"); // b sera égal à true
+```
