@@ -60,6 +60,7 @@ public class Database implements INBTSerializable<NBTTagCompound> {
     }
     public void removeString(String key) {
         STRINGS.remove(key);
+        save();
     }
 
 
@@ -78,6 +79,7 @@ public class Database implements INBTSerializable<NBTTagCompound> {
     }
     public void removeInteger(String key) {
         INTEGERS.remove(key);
+        save();
     }
 
     /**
@@ -95,6 +97,7 @@ public class Database implements INBTSerializable<NBTTagCompound> {
     }
     public void removeDouble(String key) {
         DOUBLES.remove(key);
+        save();
     }
 
     /**
@@ -112,6 +115,7 @@ public class Database implements INBTSerializable<NBTTagCompound> {
     }
     public void removeFloat(String key) {
         FLOATS.remove(key);
+        save();
     }
 
     /**
@@ -129,6 +133,7 @@ public class Database implements INBTSerializable<NBTTagCompound> {
     }
     public void removeBoolean(String key) {
         BOOLEANS.remove(key);
+        save();
     }
 
     @Override

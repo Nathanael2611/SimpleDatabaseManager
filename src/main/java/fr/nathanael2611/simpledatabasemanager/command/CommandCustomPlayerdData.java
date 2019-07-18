@@ -16,9 +16,12 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class contain the custom player data command
+ *
+ * @author Nathanael2611
+ */
 public class CommandCustomPlayerdData extends CommandBase {
-
-
 
     @Override
     public String getName() {
@@ -70,7 +73,7 @@ public class CommandCustomPlayerdData extends CommandBase {
                     data = playerData.getBoolean(args[2]);
                 }
 
-                sender.sendMessage(new TextComponentString(args[1].toUpperCase() + ":" + args[2] + " = " + data));
+                sender.sendMessage(new TextComponentString("§2" + actionType.substring(3) + " §a'" + args[2] + "'§2 in player §a'" + playerStr + "'§2 is §a'" + data + "'§2."));
             }else if(actionType.startsWith("set")){
                 if(args.length <4){
                     sender.sendMessage(new TextComponentString("§cCorrect usage: " + args[0] + " " + args[1] + " " + args[2] + "<value>"));
@@ -113,7 +116,23 @@ public class CommandCustomPlayerdData extends CommandBase {
                 }
                 sender.sendMessage(new TextComponentString("§2" + actionType.substring(3) + " §a'" + args[2] + "' §2in player §a'" + playerStr + "' §2was set to §a'" + builder.toString() + "'§2."));
             }else if(actionType.startsWith("remove")){
-                
+                if(actionType.equalsIgnoreCase("removeString")){
+                    playerData.removeString(args[2]);
+                }
+                if(actionType.equalsIgnoreCase("removeInteger")){
+                    playerData.removeInteger(args[2]);
+                }
+                if(actionType.equalsIgnoreCase("removeDouble")){
+                    playerData.removeDouble(args[2]);
+                }
+                if(actionType.equalsIgnoreCase("removeFloat")){
+                    playerData.removeFloat(args[2]);
+                }
+                if(actionType.equalsIgnoreCase("removeBoolean")){
+                    playerData.removeBoolean(args[2]);
+                }
+
+                sender.sendMessage(new TextComponentString("§2" + actionType.substring(6) + " §a'" + args[2] + "'§2 was successfully removed from player §a'" + playerStr + "'§2."));
             }
         }else{
             sender.sendMessage(correctUsage);
@@ -137,7 +156,6 @@ public class CommandCustomPlayerdData extends CommandBase {
         if(args.length == 3){
             EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(args[0]);
             if(player != null){
-                System.out.println(args[1]);
                 if(args[1].contains("String")){
                     return getListOfStringsMatchingLastWord(
                             args,

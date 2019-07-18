@@ -17,6 +17,11 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * The databases and playerdatas storage and managing class
+ *
+ * @author Nathanael2611
+ */
 public class Databases extends WorldSavedData {
     private static Databases instance;
 
@@ -26,7 +31,7 @@ public class Databases extends WorldSavedData {
     public static void save() {
         SyncedDatabases.syncAll();
         for(EntityPlayerMP entityPlayerMP : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()){
-            PacketHandler.network.sendTo(
+            PacketHandler.INSTANCE.sendTo(
                     new PacketSendClientPlayerData(entityPlayerMP), entityPlayerMP
             );
         }
