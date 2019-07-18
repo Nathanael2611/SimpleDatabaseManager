@@ -13,14 +13,14 @@ public class PacketHandler {
     public static SimpleNetworkWrapper network;
 
     public static void initPackets() {
-        PacketHandler.network = NetworkRegistry.INSTANCE.newSimpleChannel(SimpleDatabaseManager.MOD_ID.toUpperCase());
-        PacketHandler.network.registerMessage(
+        network = NetworkRegistry.INSTANCE.newSimpleChannel(SimpleDatabaseManager.MOD_ID.toUpperCase());
+        network.registerMessage(
                 PacketSendClientPlayerData.Message.class,
                 PacketSendClientPlayerData.class,
                 1,
                 Side.CLIENT
         );
-        PacketHandler.network.registerMessage(
+        network.registerMessage(
                 PacketSendDatabaseToClient.Message.class,
                 PacketSendDatabaseToClient.class,
                 2,
