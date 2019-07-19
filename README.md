@@ -30,4 +30,8 @@ In short, SimpleDatabaseManager is a lib that allows you to easily store persist
 Pour apprendre à utiliser la lib dans vos mods, rendez-vous sur le wiki.
 https://github.com/Nathanael2611/SimpleDatabaseManager/wiki
 
+# Besoin d'aide ?
+Rejoins mon discord, tu pourras y demander de l'aide quant à l'utilisation de la lib et je me ferais un plaisiiiir de l'aider! :D
+https://discord.gg/nd99fEN
+
 :warning: **Je précise que pour ne pas avoir de ClassNotFoundException, une fois votre mod build, il faudra mettre la lib dans votre dossier mod, comme un mod normal.** :warning:
