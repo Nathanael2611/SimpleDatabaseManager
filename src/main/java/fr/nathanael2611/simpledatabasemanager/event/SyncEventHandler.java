@@ -14,7 +14,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
  */
 @Mod.EventBusSubscriber
 public class SyncEventHandler {
-
     /**
      * Just syncing the player-data from server, to client.
      */
