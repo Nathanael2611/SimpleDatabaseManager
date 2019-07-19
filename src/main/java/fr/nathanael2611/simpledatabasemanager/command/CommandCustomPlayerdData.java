@@ -49,32 +49,30 @@ public class CommandCustomPlayerdData extends CommandBase {
             Database playerData = Databases.getPlayerData(player);
 
 
-            if(!Arrays.asList(Database.COMMAND_ALL_ACTIONS).contains(actionType)){
+            if(!Arrays.asList(EnumDatabaseActions.getActionsNames()).contains(actionType)){
                 sender.sendMessage(
                         correctUsage
                 );
             }
 
+            /**
+             * Get command
+             */
             if(actionType.startsWith("get")){
                 Object data = null;
-                if(actionType.equalsIgnoreCase("getString")){
-                    data = playerData.getString(args[2]);
+                switch(actionType.toLowerCase()){
+                    case "getstring": data = playerData.getString(args[2]); break;
+                    case "getinteger": data = playerData.getInteger(args[2]);break;
+                    case "getdouble": data = playerData.getDouble(args[2]);break;
+                    case "getfloat": data = playerData.getFloat(args[2]);break;
+                    case "getboolean": data = playerData.getBoolean(args[2]);break;
                 }
-                if(actionType.equalsIgnoreCase("getInteger")){
-                    data = playerData.getInteger(args[2]);
-                }
-                if(actionType.equalsIgnoreCase("getDouble")){
-                    data = playerData.getDouble(args[2]);
-                }
-                if(actionType.equalsIgnoreCase("getFloat")){
-                    data = playerData.getFloat(args[2]);
-                }
-                if(actionType.equalsIgnoreCase("getBoolean")){
-                    data = playerData.getBoolean(args[2]);
-                }
-
                 sender.sendMessage(new TextComponentString("§2" + actionType.substring(3) + " §a'" + args[2] + "'§2 in player §a'" + playerStr + "'§2 is §a'" + data + "'§2."));
-            }else if(actionType.startsWith("set")){
+            }
+            /**
+             * Set command
+             */
+            else if(actionType.startsWith("set")){
                 if(args.length <4){
                     sender.sendMessage(new TextComponentString("§cCorrect usage: " + args[0] + " " + args[1] + " " + args[2] + "<value>"));
                     return;
@@ -96,10 +94,10 @@ public class CommandCustomPlayerdData extends CommandBase {
                 }else if(Helpers.isNumeric(args[3])){
                     if(actionType.equalsIgnoreCase("setInteger")){
                         playerData.setInteger(args[2], Integer.parseInt(args[3]));
-                    }
+                    }else
                     if(actionType.equalsIgnoreCase("setDouble")){
                         playerData.setDouble(args[2], Double.parseDouble(args[3]));
-                    }
+                    }else
                     if(actionType.equalsIgnoreCase("setFloat")){
                         playerData.setFloat(args[2], Float.parseFloat(args[3]));
                     }
@@ -115,23 +113,18 @@ public class CommandCustomPlayerdData extends CommandBase {
                     builder.append(args[3]);
                 }
                 sender.sendMessage(new TextComponentString("§2" + actionType.substring(3) + " §a'" + args[2] + "' §2in player §a'" + playerStr + "' §2was set to §a'" + builder.toString() + "'§2."));
-            }else if(actionType.startsWith("remove")){
-                if(actionType.equalsIgnoreCase("removeString")){
-                    playerData.removeString(args[2]);
+            }
+            /**
+             * Remove command
+             */
+            else if(actionType.startsWith("remove")){
+                switch(actionType.toLowerCase()){
+                    case "removestring": playerData.removeString(args[2]);break;
+                    case "removeinteger": playerData.removeInteger(args[2]);break;
+                    case "removedouble": playerData.removeDouble(args[2]);break;
+                    case "removefloat": playerData.removeFloat(args[2]);break;
+                    case "removeboolean": playerData.removeBoolean(args[2]);break;
                 }
-                if(actionType.equalsIgnoreCase("removeInteger")){
-                    playerData.removeInteger(args[2]);
-                }
-                if(actionType.equalsIgnoreCase("removeDouble")){
-                    playerData.removeDouble(args[2]);
-                }
-                if(actionType.equalsIgnoreCase("removeFloat")){
-                    playerData.removeFloat(args[2]);
-                }
-                if(actionType.equalsIgnoreCase("removeBoolean")){
-                    playerData.removeBoolean(args[2]);
-                }
-
                 sender.sendMessage(new TextComponentString("§2" + actionType.substring(6) + " §a'" + args[2] + "'§2 was successfully removed from player §a'" + playerStr + "'§2."));
             }
         }else{
@@ -151,7 +144,7 @@ public class CommandCustomPlayerdData extends CommandBase {
             return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
         if(args.length == 2)
             return getListOfStringsMatchingLastWord(
-                    args, Database.COMMAND_ALL_ACTIONS
+                    args, EnumDatabaseActions.getActionsNames()
                     );
         if(args.length == 3){
             EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(args[0]);

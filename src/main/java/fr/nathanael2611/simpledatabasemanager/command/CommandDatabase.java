@@ -47,7 +47,7 @@ public class CommandDatabase extends CommandBase {
 
             List<String> commandPlus = Arrays.asList(new String[]{"sendDatabase", "enableAutoSynced"});
 
-            if (!Arrays.asList(Database.COMMAND_ALL_ACTIONS).contains(actionType) && !commandPlus.contains(actionType)) {
+            if (!Arrays.asList(EnumDatabaseActions.getActionsNames()).contains(actionType) && !commandPlus.contains(actionType)) {
                 sender.sendMessage(
                         correctUsage
                 );
@@ -56,20 +56,12 @@ public class CommandDatabase extends CommandBase {
 
             if (actionType.startsWith("get")) {
                 Object data = null;
-                if (actionType.equalsIgnoreCase("getString")) {
-                    data = database.getString(args[2]);
-                }
-                if (actionType.equalsIgnoreCase("getInteger")) {
-                    data = database.getInteger(args[2]);
-                }
-                if (actionType.equalsIgnoreCase("getDouble")) {
-                    data = database.getDouble(args[2]);
-                }
-                if (actionType.equalsIgnoreCase("getFloat")) {
-                    data = database.getFloat(args[2]);
-                }
-                if (actionType.equalsIgnoreCase("getBoolean")) {
-                    data = database.getBoolean(args[2]);
+                switch(actionType.toLowerCase()){
+                    case "getstring": data = database.getString(args[2]); break;
+                    case "getinteger": data = database.getInteger(args[2]);break;
+                    case "getdouble": data = database.getDouble(args[2]);break;
+                    case "getfloat": data = database.getFloat(args[2]);break;
+                    case "getboolean": data = database.getBoolean(args[2]);break;
                 }
                 sender.sendMessage(new TextComponentString("§2" + actionType.substring(3) + " §a'" + args[2] + "'§2 in database §a'" + dbName + "'§2 is §a'" + data + "'§2."));
             } else if (actionType.startsWith("set")) {
@@ -114,22 +106,13 @@ public class CommandDatabase extends CommandBase {
                 }
                 sender.sendMessage(new TextComponentString("§2" + actionType.substring(3) + " §a'" + args[2] + "' §2in database §a'" + dbName + "' §2was set to §a'" + builder.toString() + "'§2."));
             }else if(actionType.startsWith("remove")){
-                if(actionType.equalsIgnoreCase("removeString")){
-                    database.removeString(args[2]);
+                switch(actionType.toLowerCase()){
+                    case "removestring": database.removeString(args[2]);break;
+                    case "removeinteger": database.removeInteger(args[2]);break;
+                    case "removedouble": database.removeDouble(args[2]);break;
+                    case "removefloat": database.removeFloat(args[2]);break;
+                    case "removeboolean": database.removeBoolean(args[2]);break;
                 }
-                if(actionType.equalsIgnoreCase("removeInteger")){
-                    database.removeInteger(args[2]);
-                }
-                if(actionType.equalsIgnoreCase("removeDouble")){
-                    database.removeDouble(args[2]);
-                }
-                if(actionType.equalsIgnoreCase("removeFloat")){
-                    database.removeFloat(args[2]);
-                }
-                if(actionType.equalsIgnoreCase("removeBoolean")){
-                    database.removeBoolean(args[2]);
-                }
-
                 sender.sendMessage(new TextComponentString("§2" + actionType.substring(6) + " §a'" + args[2] + "'§2 was successfully removed from database §a'" + dbName + "'§2."));
             }else if(actionType.equalsIgnoreCase("enableAutoSynced")){
                 if (args[2].equalsIgnoreCase("true")) {
@@ -181,7 +164,7 @@ public class CommandDatabase extends CommandBase {
             String[] commandPlus = new String[]{"sendDatabase", "enableAutoSynced"};
             return getListOfStringsMatchingLastWord(
                     args,
-                    ArrayUtils.addAll(Database.COMMAND_ALL_ACTIONS, commandPlus)
+                    ArrayUtils.addAll(EnumDatabaseActions.getActionsNames(), commandPlus)
             );
         }
         if (args.length == 3) {

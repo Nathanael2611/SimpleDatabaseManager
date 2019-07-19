@@ -21,7 +21,7 @@ public class ClientDatabases {
     /**
      * Just get the client player-data
      */
-    public static Database getPersonalPlayerData() {
+    public static DatabaseReadOnly getPersonalPlayerData() {
         return personalPlayerData;
     }
 
