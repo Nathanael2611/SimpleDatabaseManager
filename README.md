@@ -18,7 +18,7 @@ En résumé, SimpleDatabaseManager est une lib permettant de stocker facilement 
 Backing up persistent data is not an easy task, if you are a beginner, you know what I mean!
 If you create a variable to which you assign a value, when you restart your game, it will have been reset.
 Well, SimpleDatabaseManager against this problem by offering a data management system in the players (each player has an assigned database) as well as a database system that you can access with their name!
-In these "databases" you can store integers, doubles, floats, thongs, as well as boolans! And of course this data is persistent, SimpleDatabaseManager takes care of everything!
+In these "databases" you can store integers, doubles, floats, longs, as well as boolans! And of course this data is persistent, SimpleDatabaseManager takes care of everything!
 In addition to adding a persistent database system, SimpleDatabaseManager does not stop there, it also allows you to synchronize a player's data with it. 
 From then on, the customer will be able to have read access to all the data present in the database assigned to him. 
 You can also choose to share some databases (read only) with EntityPlayers of your choice.
