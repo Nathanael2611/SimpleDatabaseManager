@@ -16,6 +16,9 @@ public class PacketHandler {
     public static final SimpleNetworkWrapper INSTANCE;
     private static int nextId = 1;
 
+    /**
+     * Initialize the packets
+     */
     public static void init() {
         registerMessage(PacketSendClientPlayerData.Handler.class, PacketSendClientPlayerData.class, Side.CLIENT);
         registerMessage(PacketSendDatabaseToClient.Handler.class, PacketSendDatabaseToClient.class, Side.CLIENT);

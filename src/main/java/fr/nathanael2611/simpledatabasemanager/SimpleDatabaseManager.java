@@ -2,7 +2,6 @@ package fr.nathanael2611.simpledatabasemanager;
 
 import fr.nathanael2611.simpledatabasemanager.command.CommandCustomPlayerdData;
 import fr.nathanael2611.simpledatabasemanager.command.CommandDatabase;
-import fr.nathanael2611.simpledatabasemanager.command.EnumDatabaseActions;
 import fr.nathanael2611.simpledatabasemanager.core.Databases;
 import fr.nathanael2611.simpledatabasemanager.network.PacketHandler;
 import fr.nathanael2611.simpledatabasemanager.proxy.CommonProxy;
@@ -65,7 +64,5 @@ public class SimpleDatabaseManager {
         Databases.onServerStarting(e);
         e.registerServerCommand(new CommandCustomPlayerdData());
         e.registerServerCommand(new CommandDatabase());
-
     }
-
 }

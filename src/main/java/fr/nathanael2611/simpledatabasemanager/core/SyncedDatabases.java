@@ -17,12 +17,21 @@ import java.util.ArrayList;
  */
 public class SyncedDatabases {
 
+    /**
+     * Databases present in the ArrayList will be automatically synced for all players
+     */
     public static final ArrayList<String> AUTOMATICS_SYNCED_DATABASES = new ArrayList<>();
 
+    /**
+     * Just add a database to the auto-synced ArrayList
+     */
     public static void addAutoSyncedDB(String dbName){
         if(!AUTOMATICS_SYNCED_DATABASES.contains(dbName)) AUTOMATICS_SYNCED_DATABASES.add(dbName);
     }
 
+    /**
+     * Just remove a database to the auto-synced ArrayList
+     */
     public static void removeAutoSyncedDB(String dbName){
         if(AUTOMATICS_SYNCED_DATABASES.contains(dbName)) AUTOMATICS_SYNCED_DATABASES.remove(dbName);
     }
@@ -61,5 +70,4 @@ public class SyncedDatabases {
     public static void sendDatabaseToPlayer(Database db, EntityPlayerMP playerMP){
         sendDatabaseToPlayerList(db, new EntityPlayerMP[]{ playerMP });
     }
-
 }

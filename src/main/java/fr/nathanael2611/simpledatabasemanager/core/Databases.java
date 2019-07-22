@@ -25,9 +25,14 @@ import java.util.UUID;
 public class Databases extends WorldSavedData {
     private static Databases instance;
 
+    /* All the players assigned databases */
     public static final HashMap<String, Database> PLAYERDATAS = new HashMap<String, Database>();
+    /* All the databases */
     public static final HashMap<String, Database> DATABASES = new HashMap<String, Database>();
 
+    /**
+     * Save the databases in the world
+     */
     public static void save() {
         SyncedDatabases.syncAll();
         for(EntityPlayerMP entityPlayerMP : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()){
@@ -44,6 +49,9 @@ public class Databases extends WorldSavedData {
         super(name);
     }
 
+    /**
+     * Get (and create if not exist) a player database
+     */
     public static Database getPlayerData(EntityPlayer player){
         String playerName = player.getGameProfile().getName();
         if(!PLAYERDATAS.containsKey(playerName)){
@@ -52,6 +60,9 @@ public class Databases extends WorldSavedData {
         return PLAYERDATAS.get(playerName);
     }
 
+    /**
+     * Get (and create if not exist) a database
+     */
     public static Database getDatabase(String dbName){
         if(!DATABASES.containsKey(dbName)){
             DATABASES.put(dbName, new Database(dbName));
@@ -59,6 +70,17 @@ public class Databases extends WorldSavedData {
         return DATABASES.get(dbName);
     }
 
+    /**
+     * Just remove a database from the HashMap
+     */
+    public static void removeDatabase(String dbName){
+        DATABASES.remove(dbName);
+        save();
+    }
+
+    /**
+     * Check if a database with specific name is existing
+     */
     public static boolean containsDatabase(String dbName){
         return DATABASES.containsKey(dbName);
     }
@@ -112,6 +134,9 @@ public class Databases extends WorldSavedData {
         }
     }
 
+    /**
+     * Return as an array, all databases names
+     */
     public static String[] getAllDatabasesNames(){
         return Helpers.extractAllHashMapEntryNames(DATABASES);
     }

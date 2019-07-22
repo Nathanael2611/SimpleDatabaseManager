@@ -1,6 +1,7 @@
 package fr.nathanael2611.simpledatabasemanager.util;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple helper class.
@@ -33,5 +34,27 @@ public class Helpers {
             i++;
         }
         return strings;
+    }
+
+    /**
+     * Create an entry
+     */
+    public static <V> Map.Entry createEntry(String str, V obj){
+        return new Map.Entry() {
+            @Override
+            public Object getKey() {
+                return str;
+            }
+
+            @Override
+            public V getValue() {
+                return obj;
+            }
+
+            @Override
+            public Object setValue(Object value) {
+                return null;
+            }
+        };
     }
 }

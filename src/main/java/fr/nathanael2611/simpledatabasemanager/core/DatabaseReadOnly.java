@@ -34,6 +34,13 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
     }
 
     /**
+     * Return true if database contain a specific string key
+     */
+    public boolean containsString(String key){
+        return STRINGS.containsKey(key);
+    }
+
+    /**
      * Get an integer from the database
      */
     public int getInteger(String key){
@@ -41,6 +48,13 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
             return INTEGERS.get(key);
         }
         return 0;
+    }
+
+    /**
+     * Return true if database contain a specific integer key
+     */
+    public boolean containsInteger(String key){
+        return INTEGERS.containsKey(key);
     }
 
     /**
@@ -54,6 +68,13 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
     }
 
     /**
+     * Return true if database contain a specific double key
+     */
+    public boolean containsDouble(String key){
+        return DOUBLES.containsKey(key);
+    }
+
+    /**
      * Get a float from the database
      */
     public float getFloat(String key){
@@ -61,6 +82,13 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
             return FLOATS.get(key);
         }
         return 0f;
+    }
+
+    /**
+     * Return true if database contain a specific float key
+     */
+    public boolean containsFloat(String key){
+        return FLOATS.containsKey(key);
     }
 
     /**
@@ -73,11 +101,20 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
         return false;
     }
 
+    /**
+     * Return true if database contain a specific integer key
+     */
+    public boolean containsBoolean(String key){
+        return BOOLEANS.containsKey(key);
+    }
+
+    /**
+     * Serialize the database to a NBTagCompound
+     */
     @Override
     public NBTTagCompound serializeNBT() {
         NBTTagCompound compound = new NBTTagCompound();
-
-        /**
+        /*
          * Saving the strings
          */
         NBTTagList stringList = new NBTTagList();
@@ -91,7 +128,7 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
         }
         compound.setTag("strings", stringList);
 
-        /**
+        /*
          * Saving the integers
          */
         NBTTagList integerList = new NBTTagList();
@@ -100,7 +137,7 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
         }
         compound.setTag("integers", integerList);
 
-        /**
+        /*
          * Saving the doubles
          */
         NBTTagList doubleList = new NBTTagList();
@@ -114,7 +151,7 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
         }
         compound.setTag("doubles", doubleList);
 
-        /**
+        /*
          * Saving the floats
          */
         NBTTagList floatList = new NBTTagList();
@@ -128,7 +165,7 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
         }
         compound.setTag("floats", floatList);
 
-        /**
+        /*
          * Saving the player-id
          */
         compound.setString("id", id);
@@ -136,10 +173,13 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
         return compound;
     }
 
+    /**
+     * Deserialize a NBTagCompound to the database
+     */
     @Override
     public void deserializeNBT(NBTTagCompound nbt) {
 
-        /**
+        /*
          * Read the strings
          */
         NBTTagList stringList = nbt.getTagList("strings", Constants.NBT.TAG_COMPOUND);
@@ -149,7 +189,7 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
             STRINGS.put(string.key, (String)string.value);
         }
 
-        /**
+        /*
          * Read the integers
          */
         NBTTagList integerList = nbt.getTagList("integers", Constants.NBT.TAG_COMPOUND);
@@ -161,7 +201,7 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
             );
         }
 
-        /**
+        /*
          * Read the doubles
          */
         NBTTagList doubleList = nbt.getTagList("doubles", Constants.NBT.TAG_COMPOUND);
@@ -173,7 +213,7 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
             );
         }
 
-        /**
+        /*
          * Read the floats
          */
         NBTTagList floatList = nbt.getTagList("floats", Constants.NBT.TAG_COMPOUND);
@@ -185,7 +225,7 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
             );
         }
 
-        /**
+        /*
          * Read the player-id
          */
         this.id = nbt.getString("id");
@@ -228,10 +268,10 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
         return Helpers.extractAllHashMapEntryNames(BOOLEANS);
     }
 
+    /**
+     * Save the database in the Databases WorldSavedData
+     */
     public void save(){
         Databases.save();
-
     }
-
-
 }
