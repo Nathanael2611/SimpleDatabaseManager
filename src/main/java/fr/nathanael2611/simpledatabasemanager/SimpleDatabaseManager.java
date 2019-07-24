@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
  *
  * @author Nathanael2611
  */
-@Mod(modid = "customplayerdata")
+@Mod(modid = "sdm")
 public class SimpleDatabaseManager {
 
     public static final String MOD_ID = "sdm";

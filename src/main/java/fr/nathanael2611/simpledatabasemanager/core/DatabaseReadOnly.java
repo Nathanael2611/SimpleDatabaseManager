@@ -16,11 +16,12 @@ import java.util.HashMap;
  */
 public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
 
-    protected final HashMap<String, String>  STRINGS  = new HashMap<>();
-    protected final HashMap<String, Integer> INTEGERS = new HashMap<>();
-    protected final HashMap<String, Double>  DOUBLES  = new HashMap<>();
-    protected final HashMap<String, Float>   FLOATS   = new HashMap<>();
-    protected final HashMap<String, Boolean> BOOLEANS = new HashMap<>();
+    protected final HashMap<String, String>  STRINGS         = new HashMap<>();
+    protected final HashMap<String, Integer> INTEGERS        = new HashMap<>();
+    protected final HashMap<String, Double>  DOUBLES         = new HashMap<>();
+    protected final HashMap<String, Float>   FLOATS          = new HashMap<>();
+    protected final HashMap<String, Boolean> BOOLEANS        = new HashMap<>();
+    protected final HashMap<String, NBTTagCompound> NBT_TAGS = new HashMap<>();
 
     protected String id;
 
@@ -109,6 +110,23 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
     }
 
     /**
+     * Get an nbt-tag from the database
+     */
+    public NBTTagCompound getTag(String key){
+        if(NBT_TAGS.containsKey(key)){
+            return NBT_TAGS.get(key);
+        }
+        return null;
+    }
+
+    /**
+     * Return true if database contain a specific nbt-tag key
+     */
+    public boolean containsTag(String key){
+        return NBT_TAGS.containsKey(key);
+    }
+
+    /**
      * Serialize the database to a NBTagCompound
      */
     @Override
@@ -164,6 +182,34 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
             );
         }
         compound.setTag("floats", floatList);
+
+        /*
+         * Saving the booleans
+         */
+        NBTTagList booleanList = new NBTTagList();
+        for(String str : NBT_TAGS.keySet()){
+            booleanList.appendTag(
+                    new SavedData(
+                            str,
+                            NBT_TAGS.get(str)
+                    ).serializeNBT()
+            );
+        }
+        compound.setTag("booleans", booleanList);
+
+        /*
+         * Saving the booleans
+         */
+        NBTTagList tagList = new NBTTagList();
+        for(String str : NBT_TAGS.keySet()){
+            tagList.appendTag(
+                    new SavedData(
+                            str,
+                            NBT_TAGS.get(str)
+                    ).serializeNBT()
+            );
+        }
+        compound.setTag("tags", tagList);
 
         /*
          * Saving the player-id
@@ -222,6 +268,30 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
             floatValue.deserializeNBT((NBTTagCompound) compound);
             FLOATS.put(
                     floatValue.key, (Float)floatValue.value
+            );
+        }
+
+        /*
+         * Read the booleans
+         */
+        NBTTagList booleanList = nbt.getTagList("booleans", Constants.NBT.TAG_COMPOUND);
+        for(NBTBase compound : booleanList){
+            SavedData booleanValue = new SavedData(Boolean.class);
+            booleanValue.deserializeNBT((NBTTagCompound) compound);
+            BOOLEANS.put(
+                    booleanValue.key, (Boolean) booleanValue.value
+            );
+        }
+
+        /*
+         * Read the booleans
+         */
+        NBTTagList tagList = nbt.getTagList("tags", Constants.NBT.TAG_COMPOUND);
+        for(NBTBase compound : tagList){
+            SavedData nbtValue = new SavedData(NBTTagCompound.class);
+            nbtValue.deserializeNBT((NBTTagCompound) compound);
+            NBT_TAGS.put(
+                    nbtValue.key, (NBTTagCompound) nbtValue.value
             );
         }
 

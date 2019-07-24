@@ -1,5 +1,7 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 /**
  * The Database class.
  * Can be serialized to nbt.
@@ -98,6 +100,22 @@ public class Database extends DatabaseReadOnly{
      */
     public void removeBoolean(String key) {
         BOOLEANS.remove(key);
+        save();
+    }
+
+    /**
+     * Set a n nbt-tag with a specific key
+     */
+    public void setTag(String key, NBTTagCompound value){
+        NBT_TAGS.put(key, value);
+        save();
+    }
+
+    /**
+     * Remove an nbt-tag with a specific key
+     */
+    public void removeTag(String key) {
+        NBT_TAGS.remove(key);
         save();
     }
 
