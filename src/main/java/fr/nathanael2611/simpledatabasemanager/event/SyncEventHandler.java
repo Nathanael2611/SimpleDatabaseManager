@@ -1,5 +1,6 @@
 package fr.nathanael2611.simpledatabasemanager.event;
 
+import fr.nathanael2611.simpledatabasemanager.core.SyncedDatabases;
 import fr.nathanael2611.simpledatabasemanager.network.PacketHandler;
 import fr.nathanael2611.simpledatabasemanager.network.PacketSendClientPlayerData;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -24,6 +25,7 @@ public class SyncEventHandler {
                     new PacketSendClientPlayerData(e.player),
                     FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(e.player.getName())
             );
+            SyncedDatabases.syncAll();
         }
     }
 }
