@@ -1,131 +1,35 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
-import net.minecraft.nbt.NBTTagCompound;
+import fr.nathanael2611.simpledatabasemanager.network.PacketSendData;
+import fr.nathanael2611.simpledatabasemanager.util.Helpers;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
-/**
- * The Database class.
- * Can be serialized to nbt.
- * Can be deserialized from nbt.
- *
- * @author Nathanael2611
- */
-public class Database extends DatabaseReadOnly{
+import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+
+public class Database extends DatabaseReadOnly
+{
+    /**
+     * Store the data-map that is contained in database after (and by the way, before) a change.
+     */
+    private ConcurrentHashMap<String, StoredData> beforeMap = null;
 
     /**
-     * A empty constructor, for deserialize an nbt after
+     * Constructor
      */
-    public Database(){}
-
-    /**
-     * Constructor for create an empty database with a custom name
-     */
-    public Database(String id){
-        this.id = id;
+    public Database()
+    {
     }
 
     /**
-     * Define a string with a specific key
+     * Constructor
+     * @param id the database-id/name
+     * @param isPlayerData true if the database that we are creating is a player-data
      */
-    public void setString(String key, String value){
-        STRINGS.put(key, value);
-        save();
-    }
-
-    /**
-     * Remove a string with a specific key
-     */
-    public void removeString(String key) {
-        STRINGS.remove(key);
-        save();
-    }
-
-    /**
-     * Define an integer with a specific key
-     */
-    public void setInteger(String key, int value){
-        INTEGERS.put(key, value);
-        save();
-    }
-
-    /**
-     * Remove an integer with a specific key
-     */
-    public void removeInteger(String key) {
-        INTEGERS.remove(key);
-        save();
-    }
-
-    /**
-     * Define a double with a specific key
-     */
-    public void setDouble(String key, double value){
-        DOUBLES.put(key, value);
-        save();
-    }
-
-    /**
-     * Remove a double with a specific key
-     */
-    public void removeDouble(String key) {
-        DOUBLES.remove(key);
-        save();
-    }
-
-    /**
-     * Define a float with a specific key
-     */
-    public void setFloat(String key, float value){
-        FLOATS.put(key, value);
-        save();
-    }
-
-    /**
-     * Remove a float with a specific key
-     */
-    public void removeFloat(String key) {
-        FLOATS.remove(key);
-        save();
-    }
-
-    /**
-     * Set a boolean with a specific key
-     */
-    public void setBoolean(String key, boolean value){
-        BOOLEANS.put(key, value);
-        save();
-    }
-
-    /**
-     * Remove a boolean with a specific key
-     */
-    public void removeBoolean(String key) {
-        BOOLEANS.remove(key);
-        save();
-    }
-
-    /**
-     * Set a n nbt-tag with a specific key
-     */
-    public void setTag(String key, NBTTagCompound value){
-        NBT_TAGS.put(key, value);
-        save();
-    }
-
-    /**
-     * Remove an nbt-tag with a specific key
-     */
-    public void removeTag(String key) {
-        NBT_TAGS.remove(key);
-        save();
-    }
-
-    /**
-     * Convert database to read-only one
-     */
-    public DatabaseReadOnly toReadOnly(){
-        DatabaseReadOnly readOnly = new DatabaseReadOnly();
-        readOnly.deserializeNBT(this.serializeNBT());
-        return readOnly;
+    public Database(String id, boolean isPlayerData)
+    {
+        super(id, isPlayerData);
     }
 
     /* The database helper instance */
@@ -138,4 +42,129 @@ public class Database extends DatabaseReadOnly{
         return helper;
     }
 
+    /**
+     * Set an entry in the database
+     */
+    public void set(String key, StoredData data, boolean saveAndSync)
+    {
+        DATA.put(key, data);
+        if(saveAndSync)
+        {
+            Databases.save();
+            sync();
+        }
+    }
+
+    /**
+     * Set an entry in the database
+     */
+    public void set(String key, StoredData data)
+    {
+        set(key, data, true);
+    }
+
+    /**
+     * Set a string-entry in the database
+     */
+    public void setString(String key, String value)
+    {
+        set(key, new StoredData(value));
+    }
+
+    /**
+     * Set a integer-entry in the database
+     */
+    public void setInteger(String key, int value)
+    {
+        set(key, new StoredData(value));
+    }
+
+    /**
+     * Set a double-entry in the database
+     */
+    public void setDouble(String key, double value)
+    {
+        set(key, new StoredData(value));
+    }
+
+    /**
+     * Set a float-entry in the database
+     */
+    public void setFloat(String key, float value)
+    {
+        set(key, new StoredData(value));
+    }
+
+    /**
+     * Remove an entry from the database
+     */
+    public void remove(String key, boolean saveAndSync)
+    {
+        DATA.remove(key);
+        if(saveAndSync)
+        {
+            Databases.save();
+            sync();
+        }
+    }
+
+    /**
+     * Remove an entry from the database
+     */
+    public void remove(String key)
+    {
+        remove(key, true);
+    }
+
+    /**
+     * Sync the database to concerned players
+     */
+    private void sync()
+    {
+        if(isPlayerData || SyncedDatabases.isAutoSynced(this))
+        {
+            if(beforeMap == null) beforeMap = new ConcurrentHashMap<>();
+            checkAndSend();
+            beforeMap = new ConcurrentHashMap<>(DATA);
+        }
+    }
+    /**
+     * Convert database to read-only one
+     */
+    public DatabaseReadOnly toReadOnly()
+    {
+        DatabaseReadOnly readOnly = new DatabaseReadOnly();
+        readOnly.deserializeNBT(this.serializeNBT());
+        return readOnly;
+    }
+
+    /**
+     * Just check the database-content before the modification and send updates to concerned players
+     */
+    private void checkAndSend()
+    {
+        final EntityPlayerMP[] playerMP = new EntityPlayerMP[1];
+        if(isPlayerData) FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().forEach(p -> { if(p.getName().equalsIgnoreCase(getId())) playerMP[0] = p; });
+        new HashMap<>(beforeMap).forEach((key, storedData) -> {
+            if(!DATA.containsKey(key))
+            {
+                if(isPlayerData && playerMP[0] != null) Helpers.sendTo(new PacketSendData(PacketSendData.PLAYER_DATA, "remove", key, new SavedData(key, storedData)), playerMP[0]);
+                else Helpers.sendToAll(new PacketSendData(getId(), "remove", key, new SavedData(key, storedData)));
+            } else if (get(key) != null)
+            {
+                if (get(key) != storedData)
+                {
+                    if (isPlayerData && playerMP[0] != null) Helpers.sendTo(new PacketSendData(PacketSendData.PLAYER_DATA, "set", key, new SavedData(key, get(key))), playerMP[0]);
+                    else Helpers.sendToAll(new PacketSendData(getId(), "set", key, new SavedData(key, get(key))));
+                }
+            }
+        });
+        DATA.forEach((key, storedData) -> {
+            if(!beforeMap.containsKey(key))
+            {
+                if (isPlayerData && playerMP[0] != null) Helpers.sendTo(new PacketSendData(PacketSendData.PLAYER_DATA, "set", key, new SavedData(key, storedData)), playerMP[0]);
+                else Helpers.sendToAll(new PacketSendData(getId(), "set", key, new SavedData(key, storedData)));
+            }
+        });
+    }
 }

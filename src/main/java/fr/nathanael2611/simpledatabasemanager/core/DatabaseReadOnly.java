@@ -9,230 +9,153 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.HashMap;
 
-/**
- * Simply a read-only database.
- *
- * @author Nathanael2611
- */
-public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
+public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
+{
 
-    protected final HashMap<String, String>  STRINGS         = new HashMap<>();
-    protected final HashMap<String, Integer> INTEGERS        = new HashMap<>();
-    protected final HashMap<String, Double>  DOUBLES         = new HashMap<>();
-    protected final HashMap<String, Float>   FLOATS          = new HashMap<>();
-    protected final HashMap<String, Boolean> BOOLEANS        = new HashMap<>();
-    protected final HashMap<String, NBTTagCompound> NBT_TAGS = new HashMap<>();
+    public static final int LAST_DB_VERSION = 2;
+
+    protected final HashMap<String, StoredData> DATA = new HashMap<>();
 
     protected String id;
-
-    public DatabaseReadOnly(){}
+    protected boolean isPlayerData;
+    protected int dbVersion;
 
     /**
-     * Get a string from the database
+     * A simple constructor used for deserialize database
      */
-    public String getString(String key){
-        return STRINGS.get(key);
+    public DatabaseReadOnly()
+    {
     }
 
-    /**
-     * Return true if database contain a specific string key
-     */
-    public boolean containsString(String key){
-        return STRINGS.containsKey(key);
+    public DatabaseReadOnly(String id, boolean isPlayerData)
+    {
+        this.id = id;
+        this.isPlayerData = isPlayerData;
+        this.dbVersion = LAST_DB_VERSION;
     }
 
-    /**
-     * Get an integer from the database
-     */
-    public int getInteger(String key){
-        if(INTEGERS.containsKey(key)){
-            return INTEGERS.get(key);
-        }
-        return 0;
+    public String getId() {
+        return id;
     }
 
-    /**
-     * Return true if database contain a specific integer key
-     */
-    public boolean containsInteger(String key){
-        return INTEGERS.containsKey(key);
+    public boolean isPlayerData() {
+        return isPlayerData;
     }
 
-    /**
-     * Get a double from the database
-     */
-    public double getDouble(String key){
-        if(DOUBLES.containsKey(key)){
-            return DOUBLES.get(key);
-        }
-        return 0;
+    public boolean contains(String key)
+    {
+        return DATA.containsKey(key);
     }
 
-    /**
-     * Return true if database contain a specific double key
-     */
-    public boolean containsDouble(String key){
-        return DOUBLES.containsKey(key);
-    }
-
-    /**
-     * Get a float from the database
-     */
-    public float getFloat(String key){
-        if(FLOATS.containsKey(key)){
-            return FLOATS.get(key);
-        }
-        return 0f;
-    }
-
-    /**
-     * Return true if database contain a specific float key
-     */
-    public boolean containsFloat(String key){
-        return FLOATS.containsKey(key);
-    }
-
-    /**
-     * Get a boolean from the database
-     */
-    public boolean getBoolean(String key){
-        if(BOOLEANS.containsKey(key)){
-            return BOOLEANS.get(key);
+    private boolean isType(String key, Class type)
+    {
+        if(contains(key))
+        {
+            return DATA.get(key).getType() == type;
         }
         return false;
     }
 
-    /**
-     * Return true if database contain a specific integer key
-     */
-    public boolean containsBoolean(String key){
-        return BOOLEANS.containsKey(key);
+    public boolean isString(String key)
+    {
+        return isType(key, String.class);
     }
 
-    /**
-     * Get an nbt-tag from the database
-     */
-    public NBTTagCompound getTag(String key){
-        if(NBT_TAGS.containsKey(key)){
-            return NBT_TAGS.get(key);
-        }
-        return null;
+    public boolean isInteger(String key)
+    {
+        return isType(key, Integer.class);
     }
 
-    /**
-     * Return true if database contain a specific nbt-tag key
-     */
-    public boolean containsTag(String key){
-        return NBT_TAGS.containsKey(key);
+    public boolean isDouble(String key)
+    {
+        return isType(key, Double.class);
     }
 
-    /**
-     * Serialize the database to a NBTagCompound
-     */
+    public boolean isFloat(String key)
+    {
+        return isType(key, Float.class);
+    }
+
+    public StoredData get(String key)
+    {
+        return DATA.getOrDefault(key, new StoredData(null));
+    }
+
+    public String getString(String key)
+    {
+        return get(key).asString();
+    }
+
+    public int getInteger(String key)
+    {
+        return get(key).asInteger();
+    }
+
+    public double getDouble(String key)
+    {
+        return get(key).asDouble();
+    }
+
+    public float getFloat(String key)
+    {
+        return get(key).asFloat();
+    }
+
     @Override
-    public NBTTagCompound serializeNBT() {
+    public NBTTagCompound serializeNBT()
+    {
         NBTTagCompound compound = new NBTTagCompound();
-        /*
-         * Saving the strings
-         */
-        NBTTagList stringList = new NBTTagList();
-        for(String str : STRINGS.keySet()){
-            stringList.appendTag(
-                    new SavedData(
-                            str,
-                            STRINGS.get(str)
-                    ).serializeNBT()
-            );
-        }
-        compound.setTag("strings", stringList);
 
-        /*
-         * Saving the integers
-         */
-        NBTTagList integerList = new NBTTagList();
-        for(String str : INTEGERS.keySet()){
-            integerList.appendTag(new SavedData(str, INTEGERS.get(str)).serializeNBT());
-        }
-        compound.setTag("integers", integerList);
+        compound.setString("id", this.id == null ? "" : this.id);
+        compound.setShort("isPlayerData", (short) (isPlayerData ? 1 : 0));
+        compound.setInteger("dbVersion", this.dbVersion);
 
-        /*
-         * Saving the doubles
-         */
-        NBTTagList doubleList = new NBTTagList();
-        for(String str : DOUBLES.keySet()){
-            doubleList.appendTag(
-                    new SavedData(
-                            str,
-                            DOUBLES.get(str)
-                    ).serializeNBT()
-            );
+        NBTTagList dataList = new NBTTagList();
+        for(String str : DATA.keySet())
+        {
+            dataList.appendTag(new SavedData(str, DATA.get(str)).serializeNBT());
         }
-        compound.setTag("doubles", doubleList);
-
-        /*
-         * Saving the floats
-         */
-        NBTTagList floatList = new NBTTagList();
-        for(String str : FLOATS.keySet()){
-            floatList.appendTag(
-                    new SavedData(
-                            str,
-                            FLOATS.get(str)
-                    ).serializeNBT()
-            );
-        }
-        compound.setTag("floats", floatList);
-
-        /*
-         * Saving the booleans
-         */
-        NBTTagList booleanList = new NBTTagList();
-        for(String str : NBT_TAGS.keySet()){
-            booleanList.appendTag(
-                    new SavedData(
-                            str,
-                            NBT_TAGS.get(str)
-                    ).serializeNBT()
-            );
-        }
-        compound.setTag("booleans", booleanList);
-
-        /*
-         * Saving the booleans
-         */
-        NBTTagList tagList = new NBTTagList();
-        for(String str : NBT_TAGS.keySet()){
-            tagList.appendTag(
-                    new SavedData(
-                            str,
-                            NBT_TAGS.get(str)
-                    ).serializeNBT()
-            );
-        }
-        compound.setTag("tags", tagList);
-
-        /*
-         * Saving the player-id
-         */
-        compound.setString("id", id);
+        compound.setTag("data", dataList);
 
         return compound;
     }
 
-    /**
-     * Deserialize a NBTagCompound to the database
-     */
     @Override
-    public void deserializeNBT(NBTTagCompound nbt) {
+    public void deserializeNBT(NBTTagCompound nbt)
+    {
+        this.id = nbt.getString("id");
+        this.isPlayerData = nbt.getShort("isPlayerData") == 1;
+
+        NBTTagList dataList = nbt.getTagList("data", Constants.NBT.TAG_COMPOUND);
+        for(NBTBase compound : dataList)
+        {
+            if(compound instanceof NBTTagCompound)
+            {
+                SavedData data = new SavedData();
+                data.deserializeNBT((NBTTagCompound) compound);
+                DATA.put(data.key, data.value);
+            }
+        }
+    }
+
+    public void deserializeSDM1DatabaseFormat(NBTTagCompound nbt, boolean isPlayerData)
+    {
+
+        if(nbt.getInteger("dbVersion") > 1)
+        {
+            return;
+        }
+
+        System.out.println(String.format("Converting database '%s' from storage format 1 to storage format 2...", nbt.getString("id")));
 
         /*
          * Read the strings
          */
         NBTTagList stringList = nbt.getTagList("strings", Constants.NBT.TAG_COMPOUND);
         for(NBTBase compound : stringList){
-            SavedData string = new SavedData(String.class);
+            SDM1SavedData string = new SDM1SavedData(String.class);
             string.deserializeNBT((NBTTagCompound) compound);
-            STRINGS.put(string.key, (String)string.value);
+            DATA.put(string.key, new StoredData(string.value));
         }
 
         /*
@@ -240,11 +163,9 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList integerList = nbt.getTagList("integers", Constants.NBT.TAG_COMPOUND);
         for(NBTBase compound : integerList){
-            SavedData integer = new SavedData(Integer.class);
+            SDM1SavedData integer = new SDM1SavedData(Integer.class);
             integer.deserializeNBT((NBTTagCompound) compound);
-            INTEGERS.put(
-                    integer.key, (Integer)integer.value
-            );
+            DATA.put(integer.key, new StoredData(integer.value));
         }
 
         /*
@@ -252,96 +173,31 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound> {
          */
         NBTTagList doubleList = nbt.getTagList("doubles", Constants.NBT.TAG_COMPOUND);
         for(NBTBase compound : doubleList){
-            SavedData doubleValue = new SavedData(Double.class);
+            SDM1SavedData doubleValue = new SDM1SavedData(Double.class);
             doubleValue.deserializeNBT((NBTTagCompound) compound);
-            DOUBLES.put(
-                    doubleValue.key, (Double)doubleValue.value
-            );
+            DATA.put(doubleValue.key, new StoredData(doubleValue.value));
         }
 
         /*
          * Read the floats
          */
         NBTTagList floatList = nbt.getTagList("floats", Constants.NBT.TAG_COMPOUND);
-        for(NBTBase compound : floatList){
-            SavedData floatValue = new SavedData(Float.class);
+        for(NBTBase compound : floatList)
+        {
+            SDM1SavedData floatValue = new SDM1SavedData(Float.class);
             floatValue.deserializeNBT((NBTTagCompound) compound);
-            FLOATS.put(
-                    floatValue.key, (Float)floatValue.value
-            );
+            DATA.put(floatValue.key, new StoredData(floatValue.value));
         }
 
-        /*
-         * Read the booleans
-         */
-        NBTTagList booleanList = nbt.getTagList("booleans", Constants.NBT.TAG_COMPOUND);
-        for(NBTBase compound : booleanList){
-            SavedData booleanValue = new SavedData(Boolean.class);
-            booleanValue.deserializeNBT((NBTTagCompound) compound);
-            BOOLEANS.put(
-                    booleanValue.key, (Boolean) booleanValue.value
-            );
-        }
-
-        /*
-         * Read the booleans
-         */
-        NBTTagList tagList = nbt.getTagList("tags", Constants.NBT.TAG_COMPOUND);
-        for(NBTBase compound : tagList){
-            SavedData nbtValue = new SavedData(NBTTagCompound.class);
-            nbtValue.deserializeNBT((NBTTagCompound) compound);
-            NBT_TAGS.put(
-                    nbtValue.key, (NBTTagCompound) nbtValue.value
-            );
-        }
-
-        /*
-         * Read the player-id
-         */
         this.id = nbt.getString("id");
+        this.isPlayerData = isPlayerData;
+        this.dbVersion = LAST_DB_VERSION;
 
     }
 
-    public String getId() {
-        return id;
+    public String[] getAllEntryNames()
+    {
+        return Helpers.extractAllHashMapEntryNames(DATA);
     }
 
-    public String[] getAllStringEntry(){
-        return Helpers.extractAllHashMapEntryNames(STRINGS);
-    }
-
-    /**
-     * Get all the integers keys stored in the database
-     */
-    public String[] getAllIntegerEntry(){
-        return Helpers.extractAllHashMapEntryNames(INTEGERS);
-    }
-
-    /**
-     * Get all the doubles keys stored in the database
-     */
-    public String[] getAllDoubleEntry(){
-        return Helpers.extractAllHashMapEntryNames(DOUBLES);
-    }
-
-    /**
-     * Get all the floats keys stored in the database
-     */
-    public String[] getAllFloatEntry(){
-        return Helpers.extractAllHashMapEntryNames(FLOATS);
-    }
-
-    /**
-     * Get all the booleans keys stored in the database
-     */
-    public String[] getAllBooleanEntry(){
-        return Helpers.extractAllHashMapEntryNames(BOOLEANS);
-    }
-
-    /**
-     * Save the database in the Databases WorldSavedData
-     */
-    public void save(){
-        Databases.save();
-    }
 }

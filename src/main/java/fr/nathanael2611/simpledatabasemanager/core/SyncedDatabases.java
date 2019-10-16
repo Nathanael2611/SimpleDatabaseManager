@@ -1,55 +1,49 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
+import fr.nathanael2611.simpledatabasemanager.network.PacketSendClientPlayerData;
+import fr.nathanael2611.simpledatabasemanager.util.Helpers;
+import net.minecraft.entity.player.EntityPlayerMP;
 import fr.nathanael2611.simpledatabasemanager.network.PacketHandler;
 import fr.nathanael2611.simpledatabasemanager.network.PacketSendDatabaseToClient;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * The databases synchronization system.
- * Used for add databases to auto sync program.
- * Used for syncall auto-synced databases for all players.
- * Also used to send some databases to specifics players.
- *
- * @author Nathanael2611
+ * This class manage all the databases that will be sync with all clients
  */
-public class SyncedDatabases {
+public class SyncedDatabases
+{
+
+    /* Contains all the synced databases names */
+    private static final List<String> SYNCED_DATABASES = new ArrayList<>();
 
     /**
-     * Databases present in the ArrayList will be automatically synced for all players
+     * Add a Database to auto-syncing list
+     * @param dbName the name of the Database
      */
-    public static final ArrayList<String> AUTOMATICS_SYNCED_DATABASES = new ArrayList<>();
-
-    /**
-     * Just add a database to the auto-synced ArrayList
-     */
-    public static void addAutoSyncedDB(String dbName){
-        if(!AUTOMATICS_SYNCED_DATABASES.contains(dbName)) AUTOMATICS_SYNCED_DATABASES.add(dbName);
+    public static void add(String dbName)
+    {
+        if(!SYNCED_DATABASES.contains("")) SYNCED_DATABASES.add(dbName);
     }
 
     /**
-     * Just remove a database to the auto-synced ArrayList
+     * Remove a Database from auto-syncing list
+     * @param dbName the name of the Database
      */
-    public static void removeAutoSyncedDB(String dbName){
-        if(AUTOMATICS_SYNCED_DATABASES.contains(dbName)) AUTOMATICS_SYNCED_DATABASES.remove(dbName);
+    public static void remove(String dbName)
+    {
+        SYNCED_DATABASES.remove(dbName);
     }
 
     /**
-     * Used for sync all databases in synced-databases for all players on the server
+     * Check if a database is contained in auto-syncing list
+     * @param db the database name
      */
-    public static void syncAll(){
-        for(EntityPlayerMP playerMP : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()){
-            for(String str : Databases.DATABASES.keySet()){
-                if(AUTOMATICS_SYNCED_DATABASES.contains(str)){
-                    PacketHandler.INSTANCE.sendTo(
-                            new PacketSendDatabaseToClient(Databases.getDatabase(str)),
-                            playerMP
-                    );
-                }
-            }
-        }
+    public static boolean isAutoSynced(DatabaseReadOnly db)
+    {
+        return !db.isPlayerData() && SYNCED_DATABASES.contains(db.getId());
     }
 
     /**
@@ -70,4 +64,21 @@ public class SyncedDatabases {
     public static void sendDatabaseToPlayer(Database db, EntityPlayerMP playerMP){
         sendDatabaseToPlayerList(db, new EntityPlayerMP[]{ playerMP });
     }
+
+
+    /**
+     * Sync all auto-synced databases and player-data with all players
+     */
+    public static void syncAll()
+    {
+        /* Send all auto-synced databases to all players */
+        Databases.DATABASES.forEach((key, db) -> {
+            if(isAutoSynced(db)) Helpers.sendToAll(new PacketSendDatabaseToClient(db));
+        });
+        /* Send all player-data to his associated player */
+        FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().forEach(entityPlayerMP -> {
+            PacketHandler.INSTANCE.sendTo(new PacketSendClientPlayerData(entityPlayerMP), entityPlayerMP);
+        });
+    }
+
 }

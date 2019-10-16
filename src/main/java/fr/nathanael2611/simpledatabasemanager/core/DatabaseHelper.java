@@ -1,10 +1,5 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
-import fr.nathanael2611.simpledatabasemanager.util.Helpers;
-
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * A simple helper to manage your databases
  *
@@ -21,6 +16,7 @@ public class DatabaseHelper {
         this.db = db;
     }
 
+    /*
     public Map.Entry getNumberEntry(HashMap<String, ? extends Number> map, String getType){
         if(map.isEmpty())return Helpers.createEntry("empty_map", 0);
         Map.Entry<String, Number> max = null;
@@ -37,51 +33,7 @@ public class DatabaseHelper {
             }
         }
         return max;
-    }
-
-    /**
-     * get the max integer entry in the database
-     */
-    public Map.Entry getMaxIntegerEntry(){
-        return getNumberEntry(db.INTEGERS, "max");
-    }
-
-    /**
-     * get the max double entry in the database
-     */
-    public Map.Entry getMaxDoubleEntry(){
-        return getNumberEntry(db.DOUBLES, "max");
-    }
-
-    /**
-     * get the max float entry in the database
-     */
-    public Map.Entry getMaxFloatEntry(){
-        return getNumberEntry(db.FLOATS, "max");
-    }
-
-
-    /**
-     * get the min integer entry in the database
-     */
-    public Map.Entry getMinIntegerEntry(){
-        return getNumberEntry(db.INTEGERS, "min");
-    }
-
-    /**
-     * get the min double entry in the database
-     */
-    public Map.Entry getMinDoubleEntry(){
-        return getNumberEntry(db.DOUBLES, "min");
-    }
-
-    /**
-     * get the min float entry in the database
-     */
-    public Map.Entry getMinFloatEntry(){
-        return getNumberEntry(db.FLOATS, "min");
-    }
-
+    }*/
 
     /**
      * Increment an integer in the database
@@ -133,13 +85,5 @@ public class DatabaseHelper {
     public void decrementFloat(String key, float value){
         incrementFloat(key, -value);
     }
-
-    /**
-     * Revert a boolean (true -> false OR false -> true)
-     */
-    public void revertBoolean(String key){
-        db.setBoolean(key, !db.getBoolean(key));
-    }
-
 
 }

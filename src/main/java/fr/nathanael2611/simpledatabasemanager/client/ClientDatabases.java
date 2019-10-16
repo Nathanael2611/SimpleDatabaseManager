@@ -1,9 +1,10 @@
 package fr.nathanael2611.simpledatabasemanager.client;
 
-import fr.nathanael2611.simpledatabasemanager.core.Database;
-import fr.nathanael2611.simpledatabasemanager.core.DatabaseReadOnly;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import fr.nathanael2611.simpledatabasemanager.core.DatabaseReadOnly;
+import fr.nathanael2611.simpledatabasemanager.util.Helpers;
 
 import java.util.HashMap;
 
@@ -14,40 +15,45 @@ import java.util.HashMap;
  * @author Nathanael2611
  */
 @SideOnly(Side.CLIENT)
-public class ClientDatabases {
+public class ClientDatabases
+{
 
+    /* Contain the personal client's player-data */
     private static DatabaseReadOnly personalPlayerData = new DatabaseReadOnly();
 
     /**
      * Just get the client player-data
      */
-    public static DatabaseReadOnly getPersonalPlayerData() {
+    public static DatabaseReadOnly getPersonalPlayerData()
+    {
         return personalPlayerData;
     }
 
-    public static void updatePersonalPlayerData(DatabaseReadOnly database){
+    /* Update the client personal player-data */
+    public static void updatePersonalPlayerData(DatabaseReadOnly database)
+    {
         personalPlayerData = database;
     }
 
     /**
-     * The databases hashmap
+     * The databases HashMap
      */
-    public static final HashMap<String, DatabaseReadOnly> CLIENT_DATABASES = new HashMap<>();
+    private static final HashMap<String, DatabaseReadOnly> CLIENT_DATABASES = new HashMap<>();
 
     /**
      * Used for update a client db
      */
-    public static void updateClientDB(DatabaseReadOnly db){
-        CLIENT_DATABASES.put(db.getId(), db);
+    public static void updateClientDB(DatabaseReadOnly db)
+    {
+        Minecraft.getMinecraft().addScheduledTask(() -> CLIENT_DATABASES.put(db.getId(), Helpers.toDatabase(db)));
     }
 
     /**
      * Used for get a read-only db
      */
-    public static DatabaseReadOnly getDatabase(String dbName){
-        if(!CLIENT_DATABASES.containsKey(dbName)){
-            CLIENT_DATABASES.put(dbName, new Database(dbName).toReadOnly());
-        }
+    public static DatabaseReadOnly getDatabase(String dbName)
+    {
+        if(!CLIENT_DATABASES.containsKey(dbName)) CLIENT_DATABASES.put(dbName, new DatabaseReadOnly(dbName, false));
         return CLIENT_DATABASES.get(dbName);
     }
 
