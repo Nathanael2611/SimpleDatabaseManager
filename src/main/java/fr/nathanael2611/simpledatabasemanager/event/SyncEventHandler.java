@@ -1,11 +1,14 @@
 package fr.nathanael2611.simpledatabasemanager.event;
 
+import fr.nathanael2611.simpledatabasemanager.core.Databases;
 import fr.nathanael2611.simpledatabasemanager.core.SyncedDatabases;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 /**
  * This class will manage the server -> client sync events
+ * And the autosave
  */
 public class SyncEventHandler
 {
@@ -18,6 +21,12 @@ public class SyncEventHandler
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent e)
     {
         if(!e.player.world.isRemote) SyncedDatabases.syncAll();
+    }
+
+    @SubscribeEvent
+    public void onWorldSave(WorldEvent.Save event)
+    {
+        Databases.save();
     }
 
 }

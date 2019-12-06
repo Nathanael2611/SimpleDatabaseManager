@@ -1,7 +1,7 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
 import fr.nathanael2611.simpledatabasemanager.network.PacketSendData;
-import fr.nathanael2611.simpledatabasemanager.util.Helpers;
+import fr.nathanael2611.simpledatabasemanager.util.SDMHelpers;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -47,11 +47,11 @@ public class Database extends DatabaseReadOnly
      */
     public void set(String key, StoredData data, boolean saveAndSync)
     {
-        DATA.put(key, data);
+        this.DATA.put(key, data);
         if(saveAndSync)
         {
-            Databases.save();
-            sync();
+            //Databases.save();
+            this.sync();
         }
     }
 
@@ -92,7 +92,7 @@ public class Database extends DatabaseReadOnly
      */
     public void setFloat(String key, float value)
     {
-        set(key, new StoredData(value));
+        this.set(key, new StoredData(value));
     }
 
     /**
@@ -100,11 +100,11 @@ public class Database extends DatabaseReadOnly
      */
     public void remove(String key, boolean saveAndSync)
     {
-        DATA.remove(key);
+        this.DATA.remove(key);
         if(saveAndSync)
         {
-            Databases.save();
-            sync();
+            //Databases.save();
+            this.sync();
         }
     }
 
@@ -113,7 +113,7 @@ public class Database extends DatabaseReadOnly
      */
     public void remove(String key)
     {
-        remove(key, true);
+        this.remove(key, true);
     }
 
     /**
@@ -148,22 +148,24 @@ public class Database extends DatabaseReadOnly
         new HashMap<>(beforeMap).forEach((key, storedData) -> {
             if(!DATA.containsKey(key))
             {
-                if(isPlayerData && playerMP[0] != null) Helpers.sendTo(new PacketSendData(PacketSendData.PLAYER_DATA, "remove", key, new SavedData(key, storedData)), playerMP[0]);
-                else Helpers.sendToAll(new PacketSendData(getId(), "remove", key, new SavedData(key, storedData)));
-            } else if (get(key) != null)
+                if(isPlayerData && playerMP[0] != null) SDMHelpers.sendTo(new PacketSendData(PacketSendData.PLAYER_DATA, "remove", key, new SavedData(key, storedData)), playerMP[0]);
+                else SDMHelpers.sendToAll(new PacketSendData(getId(), "remove", key, new SavedData(key, storedData)));
+            }
+            else if (get(key) != null)
             {
                 if (get(key) != storedData)
                 {
-                    if (isPlayerData && playerMP[0] != null) Helpers.sendTo(new PacketSendData(PacketSendData.PLAYER_DATA, "set", key, new SavedData(key, get(key))), playerMP[0]);
-                    else Helpers.sendToAll(new PacketSendData(getId(), "set", key, new SavedData(key, get(key))));
+                    if (isPlayerData && playerMP[0] != null) SDMHelpers.sendTo(new PacketSendData(PacketSendData.PLAYER_DATA, "set", key, new SavedData(key, get(key))), playerMP[0]);
+                    else SDMHelpers.sendToAll(new PacketSendData(getId(), "set", key, new SavedData(key, get(key))));
                 }
             }
         });
-        DATA.forEach((key, storedData) -> {
+        DATA.forEach((key, storedData) ->
+        {
             if(!beforeMap.containsKey(key))
             {
-                if (isPlayerData && playerMP[0] != null) Helpers.sendTo(new PacketSendData(PacketSendData.PLAYER_DATA, "set", key, new SavedData(key, storedData)), playerMP[0]);
-                else Helpers.sendToAll(new PacketSendData(getId(), "set", key, new SavedData(key, storedData)));
+                if (isPlayerData && playerMP[0] != null) SDMHelpers.sendTo(new PacketSendData(PacketSendData.PLAYER_DATA, "set", key, new SavedData(key, storedData)), playerMP[0]);
+                else SDMHelpers.sendToAll(new PacketSendData(getId(), "set", key, new SavedData(key, storedData)));
             }
         });
     }

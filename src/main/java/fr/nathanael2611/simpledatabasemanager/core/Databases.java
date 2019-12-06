@@ -1,5 +1,6 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
+import fr.nathanael2611.simpledatabasemanager.util.SDMHelpers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -8,7 +9,6 @@ import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import fr.nathanael2611.simpledatabasemanager.SimpleDatabaseManager;
-import fr.nathanael2611.simpledatabasemanager.util.Helpers;
 
 import java.util.HashMap;
 
@@ -73,7 +73,8 @@ public class Databases extends WorldSavedData
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
+    public void readFromNBT(NBTTagCompound nbt)
+    {
         PLAYERDATAS.clear();
         NBTTagList playerDataList = nbt.getTagList("playerdatas", Constants.NBT.TAG_COMPOUND);
 
@@ -97,14 +98,8 @@ public class Databases extends WorldSavedData
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-
-        System.out.println("Databases:");
-        DATABASES.forEach((key, database) -> System.out.println(database));
-
-        System.out.println("PlayerDatas:");
-        PLAYERDATAS.forEach((key, database) -> System.out.println(database));
-
+    public NBTTagCompound writeToNBT(NBTTagCompound compound)
+    {
         NBTTagList playerdataList = new NBTTagList();
         for (Database playerData : PLAYERDATAS.values()) {
             playerdataList.appendTag(playerData.serializeNBT());
@@ -142,12 +137,12 @@ public class Databases extends WorldSavedData
      */
     public static String[] getAllDatabasesNames()
     {
-        return Helpers.extractAllHashMapEntryNames(DATABASES);
+        return SDMHelpers.extractAllHashMapEntryNames(DATABASES);
     }
 
     public static String[] getAllPlayerThatHavePlayerdatas()
     {
-        return Helpers.extractAllHashMapEntryNames(PLAYERDATAS);
+        return SDMHelpers.extractAllHashMapEntryNames(PLAYERDATAS);
     }
 
     /**
@@ -159,7 +154,7 @@ public class Databases extends WorldSavedData
 
     public static boolean isV1Format(NBTTagCompound compound)
     {
-        return compound.getInteger("dbVersion") < 2;
+        return compound.hasKey("strings", new NBTTagList().getId());
     }
 
 }

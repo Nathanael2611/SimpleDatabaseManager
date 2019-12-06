@@ -18,7 +18,7 @@ public class DatabaseHelper {
 
     /*
     public Map.Entry getNumberEntry(HashMap<String, ? extends Number> map, String getType){
-        if(map.isEmpty())return Helpers.createEntry("empty_map", 0);
+        if(map.isEmpty())return SDMHelpers.createEntry("empty_map", 0);
         Map.Entry<String, Number> max = null;
         for(Map.Entry<String, ? extends Number> entry : map.entrySet()){
             if(max == null)max = (Map.Entry<String, Number>) entry;

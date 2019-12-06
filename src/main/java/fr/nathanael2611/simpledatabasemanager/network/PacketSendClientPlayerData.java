@@ -16,40 +16,47 @@ import fr.nathanael2611.simpledatabasemanager.core.Databases;
  *
  * @author Nathanael2611
  */
-public class PacketSendClientPlayerData implements IMessage {
+public class PacketSendClientPlayerData implements IMessage
+{
 
     private DatabaseReadOnly playerData;
 
     /**
      * Empty constructor
      */
-    public PacketSendClientPlayerData() {
+    public PacketSendClientPlayerData()
+    {
     }
 
     /**
      * Constructor
      * @param player the player to send the player-data
      */
-    public PacketSendClientPlayerData(EntityPlayer player) {
+    public PacketSendClientPlayerData(EntityPlayer player)
+    {
         NBTTagCompound compound = Databases.getPlayerData(player).serializeNBT();
         playerData = new DatabaseReadOnly();
         playerData.deserializeNBT(compound);
     }
 
     @Override
-    public void fromBytes(ByteBuf buf) {
+    public void fromBytes(ByteBuf buf)
+    {
         playerData = new DatabaseReadOnly();
         playerData.deserializeNBT(ByteBufUtils.readTag(buf));
     }
 
     @Override
-    public void toBytes(ByteBuf buf) {
+    public void toBytes(ByteBuf buf)
+    {
         ByteBufUtils.writeTag(buf, playerData.serializeNBT());
     }
 
-    public static class Handler implements IMessageHandler<PacketSendClientPlayerData, IMessage> {
+    public static class Handler implements IMessageHandler<PacketSendClientPlayerData, IMessage>
+    {
         @Override
-        public IMessage onMessage(PacketSendClientPlayerData message, MessageContext ctx) {
+        public IMessage onMessage(PacketSendClientPlayerData message, MessageContext ctx)
+        {
             ClientDatabases.updatePersonalPlayerData(message.playerData);
             return null;
         }

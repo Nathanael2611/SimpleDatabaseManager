@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import fr.nathanael2611.simpledatabasemanager.core.DatabaseReadOnly;
-import fr.nathanael2611.simpledatabasemanager.util.Helpers;
+import fr.nathanael2611.simpledatabasemanager.util.SDMHelpers;
 
 import java.util.HashMap;
 
@@ -45,7 +45,7 @@ public class ClientDatabases
      */
     public static void updateClientDB(DatabaseReadOnly db)
     {
-        Minecraft.getMinecraft().addScheduledTask(() -> CLIENT_DATABASES.put(db.getId(), Helpers.toDatabase(db)));
+        Minecraft.getMinecraft().addScheduledTask(() -> CLIENT_DATABASES.put(db.getId(), SDMHelpers.toDatabase(db)));
     }
 
     /**

@@ -9,9 +9,10 @@ import fr.nathanael2611.simpledatabasemanager.SimpleDatabaseManager;
 /**
  * Used for initialize the networkwrapper and to register packets.
  *
- * @author Protoxy22
+ * @author Protoxy22, Nathanael2611
  */
-public class PacketHandler {
+public class PacketHandler
+{
 
     public static final SimpleNetworkWrapper INSTANCE;
     private static int nextId = 0;
@@ -19,18 +20,20 @@ public class PacketHandler {
     /**
      * Initialize the packets
      */
-    public static void init() {
+    public static void init()
+    {
         registerMessage(PacketSendClientPlayerData.Handler.class, PacketSendClientPlayerData.class, Side.CLIENT);
         registerMessage(PacketSendDatabaseToClient.Handler.class, PacketSendDatabaseToClient.class, Side.CLIENT);
         registerMessage(PacketSendData.Handler.class, PacketSendData.class, Side.CLIENT);
     }
 
-    private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side side) {
+    private static <REQ extends IMessage, REPLY extends IMessage> void registerMessage(Class<? extends IMessageHandler<REQ, REPLY>> messageHandler, Class<REQ> requestMessageType, Side side)
+    {
         INSTANCE.registerMessage(messageHandler, requestMessageType, nextId++, side);
-
     }
 
-    static {
+    static
+    {
         INSTANCE = SimpleDatabaseManager.getInstance().getPacketChannel();
     }
 }

@@ -18,14 +18,16 @@ public enum EnumDatabaseActions {
     /**
      * Enum-Constructor
      */
-    EnumDatabaseActions(String actionName){
+    EnumDatabaseActions(String actionName)
+    {
         this.actionName = actionName;
     }
 
     /**
      * @return all databases names as String array
      */
-    public static String[] getActionsNames(){
+    public static String[] getActionsNames()
+    {
         String[] names = new String[values().length];
         int i = 0;
         for(EnumDatabaseActions action : values())

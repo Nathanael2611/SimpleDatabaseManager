@@ -1,7 +1,7 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
 import fr.nathanael2611.simpledatabasemanager.network.PacketSendClientPlayerData;
-import fr.nathanael2611.simpledatabasemanager.util.Helpers;
+import fr.nathanael2611.simpledatabasemanager.util.SDMHelpers;
 import net.minecraft.entity.player.EntityPlayerMP;
 import fr.nathanael2611.simpledatabasemanager.network.PacketHandler;
 import fr.nathanael2611.simpledatabasemanager.network.PacketSendDatabaseToClient;
@@ -49,7 +49,8 @@ public class SyncedDatabases
     /**
      * Used for send a database to a specific player-list
      */
-    public static void sendDatabaseToPlayerList(Database db, EntityPlayerMP[] playerMPs){
+    public static void sendDatabaseToPlayerList(Database db, EntityPlayerMP[] playerMPs)
+    {
         for(EntityPlayerMP playerMP : playerMPs){
             PacketHandler.INSTANCE.sendTo(
                     new PacketSendDatabaseToClient(Databases.getDatabase(db.getId())),
@@ -61,10 +62,10 @@ public class SyncedDatabases
     /**
      * Used for send a database to a specific player
      */
-    public static void sendDatabaseToPlayer(Database db, EntityPlayerMP playerMP){
+    public static void sendDatabaseToPlayer(Database db, EntityPlayerMP playerMP)
+    {
         sendDatabaseToPlayerList(db, new EntityPlayerMP[]{ playerMP });
     }
-
 
     /**
      * Sync all auto-synced databases and player-data with all players
@@ -73,12 +74,10 @@ public class SyncedDatabases
     {
         /* Send all auto-synced databases to all players */
         Databases.DATABASES.forEach((key, db) -> {
-            if(isAutoSynced(db)) Helpers.sendToAll(new PacketSendDatabaseToClient(db));
+            if(isAutoSynced(db)) SDMHelpers.sendToAll(new PacketSendDatabaseToClient(db));
         });
         /* Send all player-data to his associated player */
-        FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().forEach(entityPlayerMP -> {
-            PacketHandler.INSTANCE.sendTo(new PacketSendClientPlayerData(entityPlayerMP), entityPlayerMP);
-        });
+        FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers().forEach(entityPlayerMP -> PacketHandler.INSTANCE.sendTo(new PacketSendClientPlayerData(entityPlayerMP), entityPlayerMP));
     }
 
 }

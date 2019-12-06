@@ -1,6 +1,6 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
-import fr.nathanael2611.simpledatabasemanager.util.Helpers;
+import fr.nathanael2611.simpledatabasemanager.util.SDMHelpers;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -9,15 +9,24 @@ import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.HashMap;
 
+/**
+ * A Database read-only.
+ * Only read methods.
+ */
 public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
 {
 
+    /* The last database storage format version */
     public static final int LAST_DB_VERSION = 2;
 
+    /* All the stored-data contained in database */
     protected final HashMap<String, StoredData> DATA = new HashMap<>();
 
+    /* The Database ID */
     protected String id;
+    /* Define if the database is a player-data or not */
     protected boolean isPlayerData;
+    /* The database's format-version */
     protected int dbVersion;
 
     /**
@@ -27,6 +36,11 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
     {
     }
 
+    /**
+     * Constructor
+     * @param id the Database id
+     * @param isPlayerData if the database is a player-data
+     */
     public DatabaseReadOnly(String id, boolean isPlayerData)
     {
         this.id = id;
@@ -34,73 +48,143 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
         this.dbVersion = LAST_DB_VERSION;
     }
 
-    public String getId() {
+    /**
+     * ID Getter
+     * @return the database ID
+     */
+    public String getId()
+    {
         return id;
     }
 
-    public boolean isPlayerData() {
+    /**
+     * isPlayerData Getter
+     * @return if the database is a player-data
+     */
+    public boolean isPlayerData()
+    {
         return isPlayerData;
     }
 
+    /**
+     * Used for check if the database contains a specific value-key
+     * @param key the researched key
+     * @return if the database contains the specified key
+     */
     public boolean contains(String key)
     {
         return DATA.containsKey(key);
     }
 
+    /**
+     * A simple method used to verify if a key is assigned to a specific class type
+     * @param key the researched value-key
+     * @param type the tested type
+     * @return if the value assigned to the key is a specified type
+     */
     private boolean isType(String key, Class type)
     {
-        if(contains(key))
+        if(this.contains(key))
         {
-            return DATA.get(key).getType() == type;
+            return this.DATA.get(key).getType() == type;
         }
         return false;
     }
 
+    /**
+     * Check if a specified key is assigned to a String
+     * @param key the researched key
+     * @return if the value assigned to the key is a String
+     */
     public boolean isString(String key)
     {
-        return isType(key, String.class);
+        return this.isType(key, String.class);
     }
 
+    /**
+     * Check if a specified key is assigned to an Integer
+     * @param key the researched key
+     * @return if the value assigned to the key is an Integer
+     */
     public boolean isInteger(String key)
     {
-        return isType(key, Integer.class);
+        return this.isType(key, Integer.class);
     }
 
+    /**
+     * Check if a specified key is assigned to a Double
+     * @param key the researched key
+     * @return if the value assigned to the key is a Double
+     */
     public boolean isDouble(String key)
     {
-        return isType(key, Double.class);
+        return this.isType(key, Double.class);
     }
 
+    /**
+     * Check if a specified key is assigned to a Float
+     * @param key the researched key
+     * @return if the value assigned to the key is a Float
+     */
     public boolean isFloat(String key)
     {
-        return isType(key, Float.class);
+        return this.isType(key, Float.class);
     }
 
+    /**
+     * Used for get a stored-data in the Database with his assigned key
+     * @param key the researched key
+     * @return the stored-data assigned to the specified key
+     */
     public StoredData get(String key)
     {
-        return DATA.getOrDefault(key, new StoredData(null));
+        return this.DATA.getOrDefault(key, new StoredData(null));
     }
 
+    /**
+     * Used for directly get a stored-data as String
+     * @param key the researched key
+     * @return the stored-data as String
+     */
     public String getString(String key)
     {
-        return get(key).asString();
+        return this.get(key).asString();
     }
 
+    /**
+     * Used for directly get a stored-data as Integer
+     * @param key the researched key
+     * @return the stored-data as Integer
+     */
     public int getInteger(String key)
     {
-        return get(key).asInteger();
+        return this.get(key).asInteger();
     }
 
+    /**
+     * Used for directly get a stored-data as Double
+     * @param key the researched key
+     * @return the stored-data as Double
+     */
     public double getDouble(String key)
     {
-        return get(key).asDouble();
+        return this.get(key).asDouble();
     }
 
+    /**
+     * Used for directly get a stored-data as Float
+     * @param key the researched key
+     * @return the stored-data as Float
+     */
     public float getFloat(String key)
     {
-        return get(key).asFloat();
+        return this.get(key).asFloat();
     }
 
+    /**
+     * Used for serialize the database to NBTTagCompound
+     * @return the serialized database as NBTTagCompound
+     */
     @Override
     public NBTTagCompound serializeNBT()
     {
@@ -108,10 +192,10 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
 
         compound.setString("id", this.id == null ? "" : this.id);
         compound.setShort("isPlayerData", (short) (isPlayerData ? 1 : 0));
-        compound.setInteger("dbVersion", this.dbVersion);
+        compound.setInteger("dbVersion", 2);
 
         NBTTagList dataList = new NBTTagList();
-        for(String str : DATA.keySet())
+        for(String str : this.DATA.keySet())
         {
             dataList.appendTag(new SavedData(str, DATA.get(str)).serializeNBT());
         }
@@ -120,6 +204,10 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
         return compound;
     }
 
+    /**
+     * Used for deserialize an NBTTagCompound to the Database
+     * @param nbt the specified NBTTagCompound
+     */
     @Override
     public void deserializeNBT(NBTTagCompound nbt)
     {
@@ -133,16 +221,22 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
             {
                 SavedData data = new SavedData();
                 data.deserializeNBT((NBTTagCompound) compound);
-                DATA.put(data.key, data.value);
+                this.DATA.put(data.key, data.value);
             }
         }
     }
 
-    public void deserializeSDM1DatabaseFormat(NBTTagCompound nbt, boolean isPlayerData)
+    /**
+     * Used for deserialize an old NBTTagCompound database format to the fresh new 2.0 storage-format
+     * @param nbt the old NBTTagCompound
+     * @param isPlayerData define if the NBTTagCompound that we will deserialize is a player-data
+     */
+    void deserializeSDM1DatabaseFormat(NBTTagCompound nbt, boolean isPlayerData)
     {
 
-        if(nbt.getInteger("dbVersion") > 1)
+        if(nbt.hasKey("data", new NBTTagList().getId()))
         {
+            this.deserializeNBT(nbt);
             return;
         }
 
@@ -152,30 +246,33 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
          * Read the strings
          */
         NBTTagList stringList = nbt.getTagList("strings", Constants.NBT.TAG_COMPOUND);
-        for(NBTBase compound : stringList){
+        for(NBTBase compound : stringList)
+        {
             SDM1SavedData string = new SDM1SavedData(String.class);
             string.deserializeNBT((NBTTagCompound) compound);
-            DATA.put(string.key, new StoredData(string.value));
+            this.DATA.put(string.key, new StoredData(string.value));
         }
 
         /*
          * Read the integers
          */
         NBTTagList integerList = nbt.getTagList("integers", Constants.NBT.TAG_COMPOUND);
-        for(NBTBase compound : integerList){
+        for(NBTBase compound : integerList)
+        {
             SDM1SavedData integer = new SDM1SavedData(Integer.class);
             integer.deserializeNBT((NBTTagCompound) compound);
-            DATA.put(integer.key, new StoredData(integer.value));
+            this.DATA.put(integer.key, new StoredData(integer.value));
         }
 
         /*
          * Read the doubles
          */
         NBTTagList doubleList = nbt.getTagList("doubles", Constants.NBT.TAG_COMPOUND);
-        for(NBTBase compound : doubleList){
+        for(NBTBase compound : doubleList)
+        {
             SDM1SavedData doubleValue = new SDM1SavedData(Double.class);
             doubleValue.deserializeNBT((NBTTagCompound) compound);
-            DATA.put(doubleValue.key, new StoredData(doubleValue.value));
+            this.DATA.put(doubleValue.key, new StoredData(doubleValue.value));
         }
 
         /*
@@ -186,18 +283,21 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
         {
             SDM1SavedData floatValue = new SDM1SavedData(Float.class);
             floatValue.deserializeNBT((NBTTagCompound) compound);
-            DATA.put(floatValue.key, new StoredData(floatValue.value));
+            this.DATA.put(floatValue.key, new StoredData(floatValue.value));
         }
 
         this.id = nbt.getString("id");
         this.isPlayerData = isPlayerData;
         this.dbVersion = LAST_DB_VERSION;
-
     }
 
+    /**
+     * Get all the database entries
+     * @return the database entries as String array
+     */
     public String[] getAllEntryNames()
     {
-        return Helpers.extractAllHashMapEntryNames(DATA);
+        return SDMHelpers.extractAllHashMapEntryNames(DATA);
     }
 
 }
