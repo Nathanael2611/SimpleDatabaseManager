@@ -80,6 +80,15 @@ public class Database extends DatabaseReadOnly
     }
 
     /**
+     * Set a boolean-entry in the database
+     */
+    public void setBoolean(String key, boolean value)
+    {
+        Integer integer = value ? 1 : 0;
+        set(key, new StoredData(integer));
+    }
+
+    /**
      * Set a double-entry in the database
      */
     public void setDouble(String key, double value)

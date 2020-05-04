@@ -28,6 +28,11 @@ public class CommandCustomPlayerdata extends CommandBase
     }
 
     @Override
+    public int getRequiredPermissionLevel() {
+        return 4;
+    }
+
+    @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
     {
         String correctUsage = "/customplayerdata <player> <set[String/Integer/Double/Float]/get/remove> <key> [<value>]";
