@@ -96,6 +96,14 @@ public class Database extends DatabaseReadOnly
     }
 
     /**
+     * Set a hashmap and arraylist in the database
+     */
+    public void setHashMapOrArrayList(String key, Object value)
+    {
+        this.set(key, new StoredData(value));
+    }
+
+    /**
      * Remove an entry from the database
      */
     public void remove(String key, boolean saveAndSync)

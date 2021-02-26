@@ -10,6 +10,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import fr.nathanael2611.simpledatabasemanager.SimpleDatabaseManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Databases extends WorldSavedData
@@ -128,7 +129,6 @@ public class Databases extends WorldSavedData
                 }
                 instance = data;
             }
-
         }
     }
 

@@ -182,6 +182,26 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
     }
 
     /**
+     * Used for directly get a stored-data as Hashmap
+     * @param key the researched key
+     * @return the stored-data as HashMap
+     */
+    public Object getHashMap(String key)
+    {
+        return this.get(key).asHashMap();
+    }
+
+    /**
+     * Used for directly get a stored-data as ArrayList
+     * @param key the researched key
+     * @return the stored-data as ArrayList
+     */
+    public Object getArrayList(String key)
+    {
+        return this.get(key).asArrayList();
+    }
+
+    /**
      * Used for serialize the database to NBTTagCompound
      * @return the serialized database as NBTTagCompound
      */
