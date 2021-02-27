@@ -97,9 +97,25 @@ public class Database extends DatabaseReadOnly
     }
 
     /**
-     * Set a hashmap and arraylist in the database
+     * Set a arraylist in the database
      */
-    public void setHashMapOrArrayList(String key, Object value)
+    public void setArrayList(String key, Object value)
+    {
+        this.set(key, new StoredData(value));
+    }
+
+    /**
+     * Set a Value in the database
+     */
+    public void setValue(String key, Object value)
+    {
+        this.set(key, new StoredData(value));
+    }
+
+    /**
+     * Set a hashmap  in the database
+     */
+    public void setHashMap(String key, Object value)
     {
         this.set(key, new StoredData(value));
     }

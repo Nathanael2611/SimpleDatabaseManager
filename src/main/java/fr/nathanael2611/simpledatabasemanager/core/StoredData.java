@@ -32,59 +32,50 @@ public class StoredData implements INBTSerializable<NBTBase>
     }
 
     /* Get the data as String */
-    public String asString()
-    {
-        if(this.value instanceof String) return (String) this.value;
-        return null;
+    public String asString() {
+        return this.value instanceof String ? (String)this.value : null;
     }
 
+
     /* Get the data as Integer */
-    public int asInteger()
-    {
-        if(this.value instanceof Integer) return (Integer) this.value;
-        return 0;
+    public int asInteger() {
+        return this.value instanceof Integer ? (Integer)this.value : 0;
     }
 
     /* Get the data as Double */
-    public double asDouble()
-    {
-        if(this.value instanceof Double) return (Double) this.value;
-        return 0d;
+
+    public double asDouble() {
+        return this.value instanceof Double ? (Double)this.value : 0.0D;
     }
+
 
     /* Get the data as Float */
-    public float asFloat()
-    {
-        if(this.value instanceof Float) return (Float) this.value;
-        return 0f;
+    public float asFloat() {
+        return this.value instanceof Float ? (Float)this.value : 0.0F;
     }
+
 
     /* Get the data as HashMap */
-    public Object asHashMap()
-    {
-        if(this.value instanceof Map) return this.value;
-        return Collections.EMPTY_LIST;
+    public < K, V > HashMap<K, V> asHashMap() {
+        return this.value instanceof Map ? (HashMap< K, V >) this.value : (HashMap< K, V >) Collections.EMPTY_LIST;
     }
 
+
     /* Get the data as ArrayList */
-    public Object asArrayList()
-    {
-        if(this.value instanceof ArrayList) return this.value;
-        return Collections.EMPTY_LIST;
+    public < V > ArrayList<V> asArrayList() {
+        return this.value instanceof ArrayList ? (ArrayList< V >) this.value : (ArrayList< V >) Collections.EMPTY_LIST;
     }
 
     /* Get the data as BlockPos */
     public BlockPos asBlockPos()
     {
-        if(this.value instanceof BlockPos) return (BlockPos)this.value;
-        return BlockPos.ORIGIN;
+        return this.value instanceof BlockPos ? (BlockPos)this.value : null;
     }
 
     /* Get the data as Enum */
     public Enum asEnum()
     {
-        if(this.value instanceof Enum) return (Enum)this.value;
-        return null;
+        return this.value instanceof Enum ? (Enum)this.value : null;
     }
 
     /* Get the data as an object type */
