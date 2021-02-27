@@ -45,6 +45,22 @@ public class NBTUtils {
             NBTTagCompound tag = new NBTTagCompound();
             tag.setIntArray("BlockPos", new int[] { ((BlockPos)nbt).getX(), ((BlockPos)nbt).getY(), ((BlockPos)nbt).getZ() });
             return tag;
+        } else if (nbt instanceof ISaveDatabase) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("ISave", nbt.getClass().getName());
+            ((ISaveDatabase)nbt).writeToNBT(tag);
+            return tag;
+        }
+        if (nbt instanceof Enum) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("EClass", ((Enum)nbt).getDeclaringClass().getName());
+            tag.setString("Name", ((Enum)nbt).name());
+            return tag;
+        }
+        if (nbt instanceof UUID) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("UUID", nbt.toString());
+            return tag;
         }
         //exception ?
         return null;
@@ -85,14 +101,39 @@ public class NBTUtils {
             }
             case 10:
                 NBTTagCompound tagCompound = (NBTTagCompound)nbt;
+                if(tagCompound.hasKey("ISave")){
+                    String save = tagCompound.getString("ISave");
+                    try {
+                        ISaveDatabase saveDatabase = (ISaveDatabase)Class.forName(save).newInstance();
+                        saveDatabase.readFromNBT(tagCompound);
+                        return saveDatabase;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
                 if (tagCompound.hasKey("BlockPos", 11))
                 {
                     int[] pos = tagCompound.getIntArray("BlockPos");
                     return new BlockPos(pos[0], pos[1], pos[2]);
                 }
+                if(tagCompound.hasKey("EClass")){
+                    String eClass = tagCompound.getString("EClass");
+                    try {
+                        return Enum.valueOf((Class<Enum>)Class.forName(eClass), tagCompound.getString("Name"));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (tagCompound.hasKey("UUID", 8)) {
+                    return UUID.fromString(tagCompound.getString("UUID"));
+                }
+                return null;
             default:
                 //exception ?
                 return null;
         }
+    }
+    public static Object convert(Class aClass, Object object) {
+        return Enum.valueOf(aClass,object.toString());
     }
 }

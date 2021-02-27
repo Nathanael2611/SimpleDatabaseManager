@@ -1,5 +1,6 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
+import fr.nathanael2611.simpledatabasemanager.SimpleDatabaseManager;
 import fr.nathanael2611.simpledatabasemanager.util.SDMHelpers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,9 +9,7 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import fr.nathanael2611.simpledatabasemanager.SimpleDatabaseManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Databases extends WorldSavedData

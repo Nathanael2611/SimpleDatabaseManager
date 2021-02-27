@@ -3,6 +3,7 @@ package fr.nathanael2611.simpledatabasemanager.core;
 import fr.nathanael2611.simpledatabasemanager.network.PacketSendData;
 import fr.nathanael2611.simpledatabasemanager.util.SDMHelpers;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.HashMap;
@@ -99,6 +100,30 @@ public class Database extends DatabaseReadOnly
      * Set a hashmap and arraylist in the database
      */
     public void setHashMapOrArrayList(String key, Object value)
+    {
+        this.set(key, new StoredData(value));
+    }
+
+    /**
+     * Set a Object with Interface ISaveDatabase in the database
+     */
+    public void setObject(String key, Object value)
+    {
+        this.set(key, new StoredData(value));
+    }
+
+    /**
+     * Set a BlockPos in the database
+     */
+    public void setBlockPos(String key, BlockPos value)
+    {
+        this.set(key, new StoredData(value));
+    }
+
+    /**
+     * Set a Enum in the database
+     */
+    public void setEnum(String key, Enum value)
     {
         this.set(key, new StoredData(value));
     }
