@@ -4,10 +4,13 @@ import fr.nathanael2611.simpledatabasemanager.util.SDMHelpers;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.INBTSerializable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A Database read-only.
@@ -129,6 +132,46 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
     public boolean isFloat(String key)
     {
         return this.isType(key, Float.class);
+    }
+
+    /**
+     * Check if a specified key is assigned to a ArrayList
+     * @param key the researched key
+     * @return if the value assigned to the key is a ArrayList
+     */
+    public boolean isArrayList(String key)
+    {
+        return this.isType(key, ArrayList.class);
+    }
+
+    /**
+     * Check if a specified key is assigned to a HashMap
+     * @param key the researched key
+     * @return if the value assigned to the key is a HashMap
+     */
+    public boolean isHashMap(String key)
+    {
+        return this.isType(key, Map.class);
+    }
+
+    /**
+     * Check if a specified key is assigned to a BlockPos
+     * @param key the researched key
+     * @return if the value assigned to the key is a BlockPos
+     */
+    public boolean isBlockPos(String key)
+    {
+        return this.isType(key, BlockPos.class);
+    }
+
+    /**
+     * Check if a specified key is assigned to a BlockPos
+     * @param key the researched key
+     * @return if the value assigned to the key is a BlockPos
+     */
+    public boolean isEnum(String key)
+    {
+        return this.isType(key, Enum.class);
     }
 
     /**
