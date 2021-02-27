@@ -133,7 +133,4 @@ public class NBTUtils {
                 return null;
         }
     }
-    public static Object convert(Class aClass, Object object) {
-        return Enum.valueOf(aClass,object.toString());
-    }
 }

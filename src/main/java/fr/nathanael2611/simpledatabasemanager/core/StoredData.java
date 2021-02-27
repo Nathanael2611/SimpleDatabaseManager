@@ -87,6 +87,12 @@ public class StoredData implements INBTSerializable<NBTBase>
         return null;
     }
 
+    /* Get the data as an object type */
+    public Object asObject()
+    {
+        return this.value;
+    }
+
     /* Get the data as an unknown object type */
     public Object asUnknownObject()
     {

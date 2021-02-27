@@ -36,7 +36,6 @@ public class Databases extends WorldSavedData
     /* All the databases */
     public static final HashMap<String, Database> DATABASES = new HashMap<String, Database>();
 
-
     /**
      * Get (and create if not exist) a player database
      */
