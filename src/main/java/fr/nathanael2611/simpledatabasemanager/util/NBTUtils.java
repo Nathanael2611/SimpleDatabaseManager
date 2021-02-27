@@ -1,6 +1,7 @@
 package fr.nathanael2611.simpledatabasemanager.util;
 
 import net.minecraft.nbt.*;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
 
@@ -40,6 +41,11 @@ public class NBTUtils {
             }
             return list;
         }
+        if (nbt instanceof BlockPos) {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setIntArray("BlockPos", new int[] { ((BlockPos)nbt).getX(), ((BlockPos)nbt).getY(), ((BlockPos)nbt).getZ() });
+            return tag;
+        }
         //exception ?
         return null;
     }
@@ -77,6 +83,13 @@ public class NBTUtils {
                     return hashMap;
                 }
             }
+            case 10:
+                NBTTagCompound tagCompound = (NBTTagCompound)nbt;
+                if (tagCompound.hasKey("BlockPos", 11))
+                {
+                    int[] pos = tagCompound.getIntArray("BlockPos");
+                    return new BlockPos(pos[0], pos[1], pos[2]);
+                }
             default:
                 //exception ?
                 return null;
