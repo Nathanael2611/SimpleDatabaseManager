@@ -6,6 +6,7 @@ import net.minecraft.nbt.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.util.INBTSerializable;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -63,7 +64,7 @@ public class StoredData implements INBTSerializable<NBTBase>
 
     /* Get the data as ArrayList */
     public < V > ArrayList<V> asArrayList() {
-        return this.value instanceof ArrayList ? (ArrayList< V >) this.value : (ArrayList< V >) Collections.EMPTY_LIST;
+        return this.value instanceof ArrayList ? (ArrayList< V >) this.value : new ArrayList<>();
     }
 
     /* Get the data as BlockPos */
