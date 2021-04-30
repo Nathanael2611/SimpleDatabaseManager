@@ -1,5 +1,6 @@
 package fr.nathanael2611.simpledatabasemanager.core;
 
+import fr.nathanael2611.simpledatabasemanager.SimpleDatabaseManager;
 import fr.nathanael2611.simpledatabasemanager.util.SDMHelpers;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,7 +9,6 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import fr.nathanael2611.simpledatabasemanager.SimpleDatabaseManager;
 
 import java.util.HashMap;
 
@@ -35,7 +35,6 @@ public class Databases extends WorldSavedData
     public static final HashMap<String, Database> PLAYERDATAS = new HashMap<String, Database>();
     /* All the databases */
     public static final HashMap<String, Database> DATABASES = new HashMap<String, Database>();
-
 
     /**
      * Get (and create if not exist) a player database
@@ -128,7 +127,6 @@ public class Databases extends WorldSavedData
                 }
                 instance = data;
             }
-
         }
     }
 
