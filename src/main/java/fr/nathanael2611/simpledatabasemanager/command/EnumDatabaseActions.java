@@ -9,6 +9,7 @@ public enum EnumDatabaseActions {
     SET_INTEGER("setInteger"),
     SET_DOUBLE("setDouble"),
     SET_FLOAT("setFloat"),
+    SET_BOOLEAN("setBoolean"),
     GET("get"),
     REMOVE("remove");
 

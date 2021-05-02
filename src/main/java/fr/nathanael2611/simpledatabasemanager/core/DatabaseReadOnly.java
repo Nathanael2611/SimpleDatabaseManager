@@ -205,6 +205,16 @@ public class DatabaseReadOnly implements INBTSerializable<NBTTagCompound>
     }
 
     /**
+     * Used for directly get a stored-data as Boolean
+     * @param key the researched key
+     * @return the stored-data as Boolean
+     */
+    public boolean getBoolean(String key)
+    {
+        return this.get(key).asInteger() == 1;
+    }
+
+    /**
      * Used for directly get a stored-data as Double
      * @param key the researched key
      * @return the stored-data as Double
